@@ -1,0 +1,3642 @@
+<html lang="en" data-theme="light"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeWithMunnaX · Relational Database Foundations — Interactive Lecture</title>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  svg: { fontCache: 'global' },
+  startup: { typeset: true }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-svg.min.js"></script><style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style>
+
+<style>
+:root{
+  --bg:#070b16;
+  --bg2:#0b1120;
+  --panel:#0e1729;
+  --panel2:#121d36;
+  --line:#1f2d4d;
+  --ink:#e7edf9;
+  --muted:#93a4c8;
+  --dim:#64759c;
+  --cyan:#38f0d8;
+  --cyan2:#19c4ff;
+  --violet:#9b8cff;
+  --pink:#ff6ec7;
+  --amber:#ffcb6b;
+  --green:#62e88a;
+  --red:#ff6b81;
+  --glow: 0 0 18px rgba(56,240,216,.45);
+  --r:16px;
+  --mono:'SFMono-Regular',ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:
+    radial-gradient(1400px 700px at 85% -10%, rgba(25,196,255,.16), transparent 60%),
+    radial-gradient(1200px 600px at 10% 20%, rgba(155,140,255,.12), transparent 55%),
+    radial-gradient(800px 400px at 50% 60%, rgba(255,110,199,.04), transparent 50%),
+    var(--bg);
+  color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65;font-size:16px;
+  overflow-x:hidden;
+}
+a{color:var(--cyan2);text-decoration:none;transition:color 0.2s}
+a:hover{color:var(--cyan)}
+
+.shell{display:grid;grid-template-columns:288px 1fr;max-width:1500px;margin:0 auto}
+.sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 16px 60px;
+  border-right:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),transparent)}
+.brand{font-weight:800;letter-spacing:.3px;font-size:15px;color:#fff;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.brand .dot{width:11px;height:11px;border-radius:50%;background:var(--cyan);box-shadow:var(--glow)}
+.brand small{display:block;color:var(--dim);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
+.toc{margin-top:18px;display:flex;flex-direction:column;gap:1px}
+.toc a{color:var(--muted);font-size:13.5px;padding:7px 12px;border-radius:9px;display:flex;gap:9px;align-items:center;border:1px solid transparent;transition:.15s}
+.toc a .n{font-family:var(--mono);font-size:11px;color:var(--dim);min-width:20px}
+.toc a:hover{background:var(--panel);color:var(--ink)}
+.toc a.active{background:linear-gradient(90deg,rgba(56,240,216,.16),rgba(56,240,216,.02));color:#fff;border-color:rgba(56,240,216,.35)}
+.toc a.active .n{color:var(--cyan)}
+.toc .grp{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:14px 12px 5px;font-weight:700}
+
+main{padding:0 0 120px;min-width:0}
+.progress{position:fixed;top:0;left:288px;right:0;height:3px;background:transparent;z-index:50}
+.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--cyan));box-shadow:var(--glow)}
+
+section{padding:64px 56px;border-bottom:1px solid var(--line);scroll-margin-top:10px}
+section:nth-child(even){background:linear-gradient(180deg,rgba(255,255,255,.012),transparent)}
+.wrap{max-width:920px;margin:0 auto}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:10px}
+.kicker::before{content:"";width:26px;height:2px;background:var(--cyan);display:inline-block;border-radius:2px}
+h1{font-size:clamp(30px,5vw,52px);line-height:1.08;margin:.35em 0 .2em;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,#fff,#c3baff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h2{font-size:clamp(24px,3.4vw,34px);margin:.25em 0 .5em;font-weight:800;letter-spacing:-.01em;color:#fff}
+h3{font-size:19px;margin:1.6em 0 .5em;color:#fff;font-weight:700}
+h4{font-size:15px;margin:1.2em 0 .4em;color:var(--cyan);font-weight:700;letter-spacing:.02em}
+p{color:var(--ink)}
+.lead{font-size:18.5px;color:var(--muted)}
+.muted{color:var(--muted)}
+strong{color:#fff}
+code{font-family:var(--mono);background:var(--panel2);padding:.12em .42em;border-radius:6px;font-size:.88em;color:var(--cyan)}
+ul.muted li{margin:4px 0}
+
+.card{
+  background:rgba(14,23,41,0.65);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow:0 8px 32px 0 rgba(0,0,0,0.25);
+  border-radius:var(--r);
+  padding:22px 24px;
+  margin:22px 0;
+  transition:transform .25s ease, border-color .25s ease;
+}
+.card:hover{
+  border-color:rgba(155,140,255,0.22);
+  transform:translateY(-2px);
+}
+.lab{
+  background:rgba(12,24,48,0.65);
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(56,240,216,0.22);
+  box-shadow:0 8px 32px 0 rgba(56,240,216,0.05);
+  border-radius:var(--r);
+  padding:22px 24px;
+  margin:26px 0;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .25s ease, box-shadow .25s ease;
+}
+.lab:hover{
+  border-color:rgba(56,240,216,0.45);
+  box-shadow:0 8px 32px 0 rgba(56,240,216,0.12);
+}
+.lab::before{content:"\26A1 INTERACTIVE";position:absolute;top:0;right:0;font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:#06241f;background:var(--cyan);padding:4px 12px;border-bottom-left-radius:10px;font-weight:800}
+.note{border-left:3px solid var(--violet);background:rgba(155,140,255,.07);padding:12px 18px;border-radius:0 10px 10px 0;margin:18px 0;color:var(--muted)}
+.note b,.note strong{color:#cdc4ff}
+.key{border-left:3px solid var(--amber);background:rgba(255,203,107,.07);padding:12px 18px;border-radius:0 10px 10px 0;margin:18px 0}
+.key b{color:var(--amber)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:880px){.grid2,.grid3{grid-template-columns:1fr}}
+
+.ctrl{display:flex;align-items:center;gap:12px;margin:10px 0;font-size:14px;flex-wrap:wrap}
+.ctrl label{min-width:62px;font-family:var(--mono);color:var(--muted)}
+input[type=range]{-webkit-appearance:none;appearance:none;height:5px;border-radius:4px;background:var(--line);flex:1;outline:none;min-width:120px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--cyan);box-shadow:var(--glow);cursor:pointer;border:2px solid #06241f}
+input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--cyan);cursor:pointer;border:2px solid #06241f}
+.val{font-family:var(--mono);color:var(--cyan);min-width:54px;text-align:right;font-size:13.5px}
+button.btn{
+  font-family:var(--mono);
+  background:rgba(18,29,54,0.7);
+  border:1px solid var(--line);
+  color:var(--ink);
+  padding:8px 14px;
+  border-radius:9px;
+  cursor:pointer;
+  font-size:13px;
+  transition:all .2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+button.btn:hover{
+  border-color:var(--cyan);
+  color:#fff;
+  box-shadow: 0 0 12px rgba(56,240,216,0.22);
+}
+button.btn.active{
+  background:linear-gradient(135deg, var(--cyan), var(--cyan2));
+  color:#06241f;
+  border-color:var(--cyan);
+  font-weight:700;
+  box-shadow:var(--glow);
+}
+button.btn:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}
+
+table.tt{border-collapse:collapse;font-family:var(--mono);font-size:14px;margin:8px 0}
+table.tt th,table.tt td{border:1px solid var(--line);padding:8px 16px;text-align:center}
+table.tt th{background:var(--panel2);color:var(--muted)}
+.tblwrap{overflow-x:auto}
+.readout{font-family:var(--mono);font-size:14px;background:#06101f;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:14px;white-space:pre-wrap;color:var(--cyan);overflow-wrap:anywhere}
+.readout .hl{color:var(--amber)}
+.readout .g{color:var(--green)}
+.readout .r{color:var(--red)}
+canvas{display:block;max-width:100%}
+.eqbox{background:#06101f;border:1px solid var(--line);border-radius:12px;padding:6px 18px;margin:16px 0;overflow-x:auto;color:#e7edf9}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 9px;border-radius:20px;border:1px solid var(--line);color:var(--muted);margin:2px 4px 2px 0}
+.foot{
+  max-width:920px;
+  margin:40px auto 0;
+  padding:30px 24px;
+  border-top:1px solid var(--line);
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  align-items:center;
+  text-align:center;
+}
+.foot-brand{
+  font-weight:800;
+  font-size:16px;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.foot-brand .dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--cyan);
+  box-shadow:var(--glow);
+}
+.foot-links{
+  display:flex;
+  gap:24px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.foot-links a{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--muted);
+  font-size:14px;
+  font-weight:600;
+  transition:color .2s, transform .2s;
+}
+.foot-links a:hover{
+  color:var(--cyan);
+  transform:translateY(-2px);
+}
+.foot-links svg.icon{
+  width:18px;
+  height:18px;
+  vertical-align:middle;
+}
+.foot-text{
+  font-size:12.5px;
+  color:var(--dim);
+  line-height:1.6;
+}
+[data-theme="light"] .foot-brand{
+  color:#0d1730;
+}
+[data-theme="light"] .foot-links a{
+  color:#586a8a;
+}
+[data-theme="light"] .foot-links a:hover{
+  color:#0a72b8;
+}
+[data-theme="light"] .foot-text{
+  color:#7a89a8;
+}
+.pill{font-family:var(--mono);font-size:11px;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:3px 10px;color:var(--muted)}
+.hero-net{margin:34px 0 6px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);font-family:var(--mono);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.legendbar{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);font-family:var(--mono);
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin:18px 0}
+.legendbar span{display:inline-flex;align-items:center;gap:6px}
+.legendbar i{width:11px;height:11px;border-radius:3px;display:inline-block}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+::-webkit-scrollbar-track{background:transparent}
+
+.recall{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px dashed rgba(155,140,255,.5);border-radius:var(--r);padding:18px 22px;margin:24px 0}
+.recall .q{font-weight:700;color:#cdc4ff;margin-bottom:10px}
+.recall .ans{display:none;margin-top:12px;color:var(--muted)}
+.recall.open .ans{display:block}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .65s ease, transform .65s cubic-bezier(.2,.8,.3,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.reveal{opacity:1 !important;transform:none !important;transition:none}}
+body{transition:background .35s ease,color .35s ease}
+
+.topctl{position:fixed;top:14px;right:18px;z-index:60;display:flex;gap:9px}
+.topbtn{font-family:var(--mono);font-size:12.5px;background:rgba(18,29,54,.82);border:1px solid var(--line);color:var(--ink);
+  padding:9px 14px;border-radius:30px;cursor:pointer;display:flex;align-items:center;gap:7px;backdrop-filter:blur(8px);transition:.18s}
+.topbtn:hover{border-color:var(--cyan);color:#fff}
+.topbtn.primary{background:linear-gradient(90deg,var(--violet),var(--cyan));color:#06241f;border:none;font-weight:700}
+.topbtn.primary:hover{color:#06241f;filter:brightness(1.08)}
+[data-theme="light"] .topbtn{background:rgba(255,255,255,.9);border-color:#dde4f0;color:#16223d}
+[data-theme="light"] .topbtn:hover{color:#0a4a57}
+
+.spot{position:fixed;z-index:71;border:2px solid var(--cyan);border-radius:16px;
+  box-shadow:0 0 0 9999px rgba(2,5,12,.66), 0 0 28px rgba(56,240,216,.55);
+  transition:all .5s cubic-bezier(.3,.9,.3,1);pointer-events:none}
+.storycard{position:fixed;z-index:73;left:50%;bottom:28px;transform:translateX(-50%);width:min(640px,92vw);
+  background:linear-gradient(180deg,#0f1b33,#0a1322);border:1px solid rgba(56,240,216,.42);border-radius:18px;padding:20px 24px;
+  box-shadow:0 22px 64px rgba(0,0,0,.55);color:#e7edf9;animation:popcard .35s cubic-bezier(.2,.9,.3,1)}
+@keyframes popcard{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
+.storycard .stp{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan)}
+.storycard h3{margin:6px 0 6px;color:#fff;font-size:21px}
+.storycard p{color:#aebbd6;font-size:14.5px;margin:0;line-height:1.6}
+.storynav{display:flex;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap}
+.storynav .sp{flex:1}
+.storynav .btn{padding:7px 12px}
+.storydots{display:flex;gap:5px;flex-wrap:wrap;max-width:260px}
+.storydots i{width:7px;height:7px;border-radius:50%;background:var(--line);transition:.2s;cursor:pointer}
+.storydots i.on{background:var(--cyan);transform:scale(1.35)}
+
+[data-theme="light"] body{
+  background:
+    radial-gradient(1200px 600px at 82% -5%, rgba(25,196,255,.10), transparent 55%),
+    radial-gradient(1000px 500px at 0% 8%, rgba(155,140,255,.13), transparent 55%),
+    #eef2f8;
+  color:#16223d;
+}
+[data-theme="light"] h1{
+  background: none;
+  -webkit-text-fill-color: #0d1730;
+  color:#0d1730;
+}
+[data-theme="light"] h2{color:#0d1730}
+[data-theme="light"] h3{color:#16223d}
+[data-theme="light"] h4{color:#0a8198}
+[data-theme="light"] p{color:#28364f}
+[data-theme="light"] .lead{color:#46566f}
+[data-theme="light"] .muted{color:#586a8a}
+[data-theme="light"] strong{color:#0a1326}
+[data-theme="light"] .kicker{color:#0a8198}
+[data-theme="light"] .kicker::before{background:#0a8198}
+[data-theme="light"] a{color:#0a72b8}
+[data-theme="light"] section{border-bottom-color:#dde4f0}
+[data-theme="light"] section:nth-child(even){background:linear-gradient(180deg,rgba(13,23,48,.025),transparent)}
+[data-theme="light"] .card{background:linear-gradient(180deg,#ffffff,#f5f8fe);border-color:#dde4f0;box-shadow:0 1px 3px rgba(20,40,80,.05)}
+[data-theme="light"] .card h4{color:#0a8198}
+[data-theme="light"] .card .muted,[data-theme="light"] .card p{color:#43516e}
+[data-theme="light"] .note{background:rgba(124,108,255,.09);color:#3a3357}
+[data-theme="light"] .note b,[data-theme="light"] .note strong{color:#4b3bb0}
+[data-theme="light"] .key{background:rgba(214,158,46,.11)}
+[data-theme="light"] .key b{color:#946708}
+[data-theme="light"] .sidebar{background:linear-gradient(180deg,#ffffff,transparent);border-right-color:#dde4f0}
+[data-theme="light"] .brand{color:#0d1730}
+[data-theme="light"] .toc a{color:#46566f}
+[data-theme="light"] .toc a:hover{background:#eef2fb;color:#0d1730}
+[data-theme="light"] .toc a.active{background:linear-gradient(90deg,rgba(10,129,152,.14),transparent);color:#0a4a57;border-color:rgba(10,129,152,.4)}
+[data-theme="light"] .toc a.active .n{color:#0a8198}
+[data-theme="light"] .toc .grp{color:#8693b0}
+[data-theme="light"] table.tt th{background:#eef2f9;color:#46566f}
+[data-theme="light"] table.tt td{color:#16223d;border-color:#d8e0ee}
+[data-theme="light"] .foot{color:#7a89a8}
+[data-theme="light"] .tag{color:#43516e;border-color:#d2dcec}
+[data-theme="light"] .pill{color:#43516e;background:#eef2f9;border-color:#d8e0ee}
+[data-theme="light"] .legend{color:#586a8a}
+[data-theme="light"] .legendbar{background:#ffffff;border-color:#dde4f0;color:#586a8a}
+[data-theme="light"] .recall{background:linear-gradient(180deg,#ffffff,#f5f8fe);border-color:rgba(106,76,147,.45)}
+[data-theme="light"] .recall .q{color:#4b3bb0}
+[data-theme="light"] .lab{
+  background:#f5f8fe;
+  border-color:#c9d6eb;
+  box-shadow:0 8px 24px rgba(20,40,80,.03);
+}
+[data-theme="light"] .lab h4{color:#0a8198}
+[data-theme="light"] .lab p,[data-theme="light"] .lab .muted{color:#43516e}
+[data-theme="light"] .readout{
+  background:#f0f4fa;
+  border-color:#d0dcec;
+  color:#0d1730;
+}
+[data-theme="light"] .readout .hl { color: #b77c00; }
+[data-theme="light"] .readout .g { color: #0a8f08; }
+[data-theme="light"] .readout .r { color: #d62438; }
+[data-theme="light"] .lab strong,[data-theme="light"] .lab b{color:#0a1326}
+
+
+/* Progress Tracker Styles */
+.prog-container {
+  margin: 15px 0 10px;
+  background: rgba(25, 196, 255, 0.05);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.prog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+.prog-bar-bg {
+  background: var(--line);
+  height: 6px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.prog-bar-fill {
+  background: linear-gradient(90deg, var(--violet), var(--cyan));
+  height: 100%;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+.prog-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.prog-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.prog-item.done {
+  color: #fff;
+}
+.prog-checkbox {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid var(--dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: #06241f;
+  background: transparent;
+  transition: all 0.2s;
+}
+.prog-item.done .prog-checkbox {
+  background: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: var(--glow);
+}
+.prog-item.done .prog-checkbox::after {
+  content: "✓";
+  font-weight: 900;
+  color: #06241f;
+}
+
+[data-theme="light"] .prog-container {
+  background: rgba(10, 129, 152, 0.05);
+  border-color: #dde4f0;
+}
+[data-theme="light"] .prog-header {
+  color: #0d1730;
+}
+[data-theme="light"] .prog-item.done {
+  color: #0d1730;
+}
+
+/* Cheat Sheet Drawer Styles */
+.cheat-drawer {
+  position: fixed;
+  top: 0;
+  right: -360px;
+  width: 340px;
+  height: 100vh;
+  background: rgba(14, 23, 41, 0.95);
+  backdrop-filter: blur(12px);
+  border-left: 1px solid var(--line);
+  z-index: 100;
+  transition: right 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+  padding: 30px 24px;
+  overflow-y: auto;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+}
+.cheat-drawer.open {
+  right: 0;
+}
+.cheat-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+.cheat-drawer-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+.cheat-close {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+.cheat-section {
+  margin-bottom: 24px;
+}
+.cheat-section h4 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.cheat-code {
+  font-family: var(--mono);
+  font-size: 12px;
+  background: rgba(2, 5, 12, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--ink);
+  white-space: pre-wrap;
+  margin-bottom: 10px;
+}
+.cheat-trigger-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99;
+  background: linear-gradient(90deg, var(--violet), var(--cyan));
+  color: #06241f;
+  font-weight: 700;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: var(--glow);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  transition: transform 0.2s, filter 0.2s;
+}
+.cheat-trigger-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+[data-theme="light"] .cheat-drawer {
+  background: rgba(255, 255, 255, 0.85);
+  border-left-color: #dde4f0;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+}
+[data-theme="light"] #aadhaarCardVisual {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 244, 250, 0.9)) !important;
+  border-color: #0a8198 !important;
+  box-shadow: 0 8px 24px rgba(10, 129, 152, 0.15) !important;
+}
+[data-theme="light"] #aadhaarCardName {
+  color: #0d1730 !important;
+}
+[data-theme="light"] .cheat-code {
+  background: #f5f8fe;
+  border-color: #dde4f0;
+  color: #16223d;
+}
+
+/* SQL Playground Styles */
+.play-box {
+  background: #040914;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+}
+.play-terminal {
+  background: #02050c;
+  border: 1px solid #111a2e;
+  border-radius: 8px;
+  padding: 15px;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  margin-bottom: 16px;
+}
+.play-terminal-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cyan);
+  margin-top: 10px;
+}
+.play-terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 13.5px;
+}
+.play-table-wrap {
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-top: 12px;
+}
+[data-theme="light"] .play-box {
+  background: #ffffff;
+  border-color: #dde4f0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+[data-theme="light"] .play-terminal {
+  background: #f5f8fe;
+  border-color: #dde4f0;
+}
+[data-theme="light"] .play-terminal-input {
+  color: #16223d;
+}
+
+/* JOIN Animator Section Styles */
+.join-view {
+  background: linear-gradient(180deg, var(--panel), var(--bg2));
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 24px;
+  margin: 26px 0;
+}
+
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{position:relative;height:auto;border-right:none;border-bottom:1px solid var(--line)}
+  .progress{left:0}
+  section{padding:44px 20px}
+  .foot{padding:0 20px}
+}
+
+/* Venn Diagram Styles */
+.venn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+.venn-svg {
+  width: 180px;
+  height: 120px;
+}
+.venn-circle {
+  fill-opacity: 0.35;
+  stroke-width: 2;
+  transition: fill-opacity 0.3s, fill 0.3s;
+}
+.venn-left {
+  fill: var(--cyan);
+  stroke: var(--cyan);
+}
+.venn-right {
+  fill: var(--violet);
+  stroke: var(--violet);
+}
+.venn-circle.active {
+  fill-opacity: 0.75;
+}
+.venn-circle.inactive {
+  fill-opacity: 0.1;
+}
+
+/* MCQ Quiz Styles */
+.quiz-box {
+  background: rgba(14, 23, 41, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--r);
+  padding: 24px;
+  margin: 26px 0;
+}
+.quiz-q {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #fff;
+}
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.quiz-opt {
+  background: rgba(18, 29, 54, 0.8);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14.5px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.quiz-opt:hover {
+  border-color: var(--cyan);
+  background: rgba(56, 240, 216, 0.05);
+}
+.quiz-opt.correct {
+  border-color: var(--green);
+  background: rgba(98, 232, 87, 0.1);
+  color: #fff;
+}
+.quiz-opt.incorrect {
+  border-color: var(--red);
+  background: rgba(255, 107, 129, 0.1);
+  color: #fff;
+}
+
+/* Schema Matcher Builder Styles */
+.matcher-box {
+  background: rgba(12, 24, 48, 0.65);
+  border: 1px solid rgba(56, 240, 216, 0.25);
+  border-radius: var(--r);
+  padding: 24px;
+  margin: 26px 0;
+}
+.matcher-workspace {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  background: #02050c;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+.matcher-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.matcher-table {
+  position: absolute;
+  background: #0e1729;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  width: 140px;
+  font-size: 11.5px;
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+.matcher-table-title {
+  background: var(--line);
+  padding: 4px 8px;
+  font-weight: 700;
+  text-align: center;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  color: #fff;
+}
+.matcher-col {
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.matcher-col:hover {
+  background: rgba(25, 196, 255, 0.12);
+}
+.matcher-col.selected {
+  background: rgba(56, 240, 216, 0.2);
+  color: var(--cyan);
+}
+.matcher-col.linked {
+  color: var(--green);
+}
+
+/* Confetti Styles */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+}
+.confetti-particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  opacity: 0.85;
+  animation: fall 3s linear forwards;
+}
+@keyframes fall {
+  0% { transform: translateY(-20px) rotate(0deg); }
+  100% { transform: translateY(100vh) rotate(720deg); }
+}
+
+[data-theme="light"] .quiz-box {
+  background: #ffffff;
+  border-color: #dde4f0;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.05);
+}
+[data-theme="light"] .quiz-q {
+  color: #16223d;
+}
+[data-theme="light"] .quiz-opt {
+  background: #f5f8fe;
+  border-color: #dde4f0;
+  color: #16223d;
+}
+[data-theme="light"] .matcher-box {
+  background: #ffffff;
+  border-color: #dde4f0;
+}
+[data-theme="light"] .matcher-workspace {
+  background: #f5f8fe;
+  border-color: #dde4f0;
+}
+[data-theme="light"] .matcher-table {
+  background: #ffffff;
+  border-color: #dde4f0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+[data-theme="light"] .matcher-table-title {
+  background: #eef2f9;
+  color: #16223d;
+}
+
+/* Workspace Stats Styles */
+.workspace-stats {
+  margin-top: 22px;
+  padding: 14px 12px;
+  border-radius: var(--r);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  font-size: 11.5px;
+}
+.workspace-stats-title {
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.workspace-stats-developer {
+  color: #fff;
+  font-weight: 600;
+}
+[data-theme="light"] .workspace-stats {
+  background: rgba(13, 23, 48, 0.04);
+  border-color: #dde4f0;
+}
+[data-theme="light"] .workspace-stats-title {
+  color: #0d1730;
+}
+[data-theme="light"] .workspace-stats-developer {
+  color: #0d1730;
+}
+</style>
+<style id="MJX-SVG-styles">
+mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+mjx-container[jax="SVG"] > svg a {
+  fill: blue;
+  stroke: blue;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line], svg[data-table] > g > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame], svg[data-table] > g > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed, svg[data-table] > g > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted, svg[data-table] > g > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > g > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"] path[data-c], mjx-container[jax="SVG"] use[data-c] {
+  stroke-width: 3;
+}
+</style><style>
+        @font-face {
+            font-family: 'NotoSans_online_security'; 
+            src: url(chrome-extension://llbcnfanfmjhpedaedhbcnpgeepdnnok/assets/fonts/noto-sans-regular.woff);
+        }
+
+        @font-face {
+            font-family: 'NotoSans_medium_online_security'; 
+            src: url(chrome-extension://llbcnfanfmjhpedaedhbcnpgeepdnnok/assets/fonts/noto-sans-medium.ttf);
+        }
+
+        @font-face {
+            font-family: 'NotoSans_bold_online_security'; 
+            src: url(chrome-extension://llbcnfanfmjhpedaedhbcnpgeepdnnok/assets/fonts/noto-sans-bold.woff);
+        }
+
+        @font-face {
+            font-family: 'NotoSans_semibold_online_security'; 
+            src: url(chrome-extension://llbcnfanfmjhpedaedhbcnpgeepdnnok/assets/fonts/noto-sans-semibold.ttf);
+        }
+</style><script src="chrome-extension://liecbddmkiiihnedobmlmillhodjkdmb/js/recordConsoleEvents.js"></script><link href="chrome-extension://alhgpfoeiimagjlnfekdhkjlkiomcapa/js/css/inject.css" rel="stylesheet" type="text/css" data-apio="true"><link data-apio="true" rel="stylesheet" type="text/css" href="chrome-extension://alhgpfoeiimagjlnfekdhkjlkiomcapa/js/css/a_chrome-extension_inject_global_module_scss.css"><link data-apio="true" rel="stylesheet" type="text/css" href="chrome-extension://alhgpfoeiimagjlnfekdhkjlkiomcapa/js/css/a_chrome-extension_inject_core_components_OpenPopupButton_tsx.css"></head>
+<body>
+<script>(function(){try{var t=localStorage.getItem('lectheme');if(t==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
+<div class="zp-open-popup-button"><div class="zp apolloio-css-vars-reset x_lAIzV x_ktWFc" dir="ltr"><div class="x_R61yl zp-16-1-0-zp-fixed"><img alt="Apollo.io" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0ibm9uZSIgdmlld0JveD0iMCAwIDQwIDQwIj48cGF0aCBmaWxsPSIjZWJmMjEyIiBkPSJtMjEuNDY2IDUuMDcxLjAwNCAxMC45MTVjLjAwMSAxLjcyNS0xLjgzNCAyLjgzLTMuMzU4IDIuMDI0TDcuMTcgMTIuMjIzYTE1LjEgMTUuMSAwIDAgMSAzLjEtMy42NGw4LjU4MiA3LjkzMmMuNDU1LjQyIDEuMTcyLS4wMzYuOTg1LS42MjZMMTYuNTA5IDUuNDFhMTUgMTUgMCAwIDEgNC45NTYtLjMzOE0xOC40OTYgMzQuOTI1bC0uMDA1LTEwLjg2YzAtMS43MjQgMS44MzQtMi44MyAzLjM1OS0yLjAyM2wxMC45NDYgNS43OWExNSAxNSAwIDAgMS0zLjExNiAzLjYyNmwtOC41Ny03LjkyMWMtLjQ1NS0uNDItMS4xNzIuMDM1LS45ODUuNjI1bDMuMzE2IDEwLjQ0MWExNSAxNSAwIDAgMS00Ljk0NS4zMjJNMjMuNDkyIDE4Ljg5OCAzMS40NCAxMC4zYTE1IDE1IDAgMCAwLTMuNjQtMy4xMTNsLTUuODA0IDEwLjk3MmMtLjgwNiAxLjUyNC4zIDMuMzU5IDIuMDI0IDMuMzU4bDEwLjkwNS0uMDA1YTE1LjIgMTUuMiAwIDAgMC0uMzI0LTQuOTU4bC0xMC40ODQgMy4zM2MtLjU5LjE4Ny0xLjA0NS0uNTMtLjYyNS0uOTg1TTUuMDcgMTguNTRsMTAuODcyLS4wMDRjMS43MjUgMCAyLjgzIDEuODM0IDIuMDI0IDMuMzU4TDEyLjE5MiAzMi44MWExNSAxNSAwIDAgMS0zLjYyNy0zLjEwM2w3LjkwNi04LjU1M2MuNDItLjQ1NS0uMDM2LTEuMTcyLS42MjYtLjk4NUw1LjQwOCAyMy40ODRhMTUgMTUgMCAwIDEtLjMzNy00Ljk0MyIvPjwvc3ZnPg==" class="x_kJtSQ"></div></div></div><div class="progress"><i id="progbar" style="width: 68.8168%;"></i></div>
+
+<div class="topctl">
+  <button class="topbtn primary" id="tourBtn">▶ Guided tour</button>
+  <button class="topbtn" id="themeBtn">🌙 Dark</button>
+</div>
+
+<div class="spot" id="storyspot" style="display:none"></div>
+<div class="storycard" id="storycard" style="display:none">
+  <div class="stp" id="storyStep"></div>
+  <h3 id="storyTitle"></h3>
+  <p id="storyText"></p>
+  <div class="storynav">
+    <div class="storydots" id="storyDots"></div>
+    <div class="sp"></div>
+    <button class="btn" id="storyPrev">◀ prev</button>
+    <button class="btn" id="storyPlay">⏸ pause</button>
+    <button class="btn" id="storyNext">next ▶</button>
+    <button class="btn" id="storyExit">✕ exit</button>
+  </div>
+</div>
+
+<div class="shell">
+
+<aside class="sidebar">
+  <div class="brand"><span class="dot"></span><div>CodeWithMunnaX<small>DS &amp; AI · 3 · SQL</small></div></div>
+  
+  <!-- Gamified Progress Tracker -->
+  <div class="prog-container" style="margin: 10px 0 14px; padding: 10px 12px; border-radius: 8px;">
+    <div class="prog-header" style="margin-bottom: 5px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">
+      <span>Lab Progress</span>
+      <span id="progPercent">0%</span>
+    </div>
+    <div class="prog-bar-bg" style="height: 5px; margin-bottom: 0;">
+      <div class="prog-bar-fill" id="progBarFill"></div>
+    </div>
+  </div>
+
+  <nav class="toc" id="toc">
+    <div class="grp">Why databases exist</div>
+    <a href="#sheet" class=""><span class="n">01</span> The spreadsheet disaster</a>
+    <a href="#dbms" class=""><span class="n">02</span> The librarian (DBMS)</a>
+    <div class="grp">The building blocks</div>
+    <a href="#anatomy" class=""><span class="n">03</span> Rows, columns, cells</a>
+    <a href="#pk" class=""><span class="n">04</span> Primary keys</a>
+    <a href="#fk" class=""><span class="n">05</span> Foreign keys</a>
+    <div class="grp">Putting it together</div>
+    <a href="#rel" class="active"><span class="n">06</span> Relationship shapes</a>
+    <a href="#schema"><span class="n">07</span> Design the schema</a>
+    <div class="grp">Wrap up</div>
+    <a href="#recap"><span class="n">08</span> Final Assessment</a>
+  </nav>
+
+  <!-- Workspace Stats Card -->
+  <div class="workspace-stats">
+    <div class="workspace-stats-title">
+      <span style="display:inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: var(--glow);"></span>
+      WORKSPACE STATUS
+    </div>
+    <div style="display: flex; justify-content: space-between; color: var(--muted); margin-bottom: 4px;">
+      <span>Target Engine:</span> <span style="font-family: var(--mono); color: var(--cyan);">SQLite v3</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; color: var(--muted); margin-bottom: 4px;">
+      <span>Active Tables:</span> <span style="font-family: var(--mono); color: var(--cyan);">5</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; color: var(--muted); margin-bottom: 4px;">
+      <span>Established Keys:</span> <span style="font-family: var(--mono); color: var(--cyan);">5</span>
+    </div>
+    <div style="margin: 8px 0;">
+      <canvas id="sparklineCanvas" width="160" height="24" style="width: 100%; height: 24px; opacity: 0.85;"></canvas>
+    </div>
+    <div style="display: flex; justify-content: space-between; color: var(--muted); border-top: 1px solid var(--line); padding-top: 6px; margin-top: 6px;">
+      <span>Developer:</span> <span class="workspace-stats-developer">Munna Kumar</span>
+    </div>
+  </div>
+</aside>
+
+<main>
+
+<section id="intro">
+ <div class="wrap">
+  <h1 class="reveal in">Relational Database<br>Foundations</h1>
+  <p class="muted reveal in" style="font-size:13.5px">Prepared for the <strong>Data Science &amp; AI Program, CodeWithMunnaX</strong> · 3: SQL.</p>
+  <p class="lead reveal in">You just joined <strong>Zwiggy</strong>, a food delivery startup, as its first data analyst. All company data lives in one giant spreadsheet — and it is failing. Tonight you learn what professionals use instead: <strong>tables, keys, and a schema</strong>. Every panel marked ⚡ is live. Touch everything.</p>
+  <div class="hero-net">
+    <canvas id="heroCanvas" width="900" height="230" style="width:100%;height:auto"></canvas>
+  </div>
+  <div class="legendbar reveal in">
+    <span><i style="background:var(--cyan)"></i> data / pointers</span>
+    <span><i style="background:var(--amber)"></i> keys &amp; highlights</span>
+    <span><i style="background:var(--green)"></i> accepted / unique</span>
+    <span><i style="background:var(--red)"></i> rejected / duplicate</span>
+    <span><i style="background:var(--violet)"></i> structure</span>
+  </div>
+  <div class="grid3 reveal in">
+    <div class="card"><h4>What you'll build</h4><p class="muted" style="font-size:14px">A full database blueprint for Zwiggy: five linked tables where every fact lives exactly once.</p></div>
+    <div class="card"><h4>Why it matters</h4><p class="muted" style="font-size:14px">Every dataset you ever load into Pandas was born in a database. SQL is the most-tested skill in analyst interviews.</p></div>
+    <div class="card"><h4>How to use this page</h4><p class="muted" style="font-size:14px">Read top to bottom, or press <strong>▶ Guided tour</strong>. Each idea has a hands-on lab. Play until it clicks.</p></div>
+  </div>
+  <div class="recall reveal in">
+    <div class="q">For the instructor — 90-minute run plan</div>
+    <button class="btn" data-recall="">Show the plan</button>
+    <div class="ans">
+      8:00 — The Zwiggy story and the spreadsheet disaster (ch 01, lab).<br>
+      8:12 — Databases and the librarian round trip (ch 02).<br>
+      8:20 — Anatomy of a table + hover lab + grain quiz (ch 03).<br>
+      8:35 — Primary keys: run the audit live, let students vote (ch 04).<br>
+      8:50 — Foreign keys: click orders, try to break integrity (ch 05).<br>
+      9:03 — Relationship game: students shout answers (ch 06).<br>
+      9:12 — Build Zwiggy's schema step by step (ch 07).<br>
+      9:25 — Recap cards + Friday teaser (ch 08). Homework: the companion PDF.
+    </div>
+  </div>
+ </div>
+</section>
+
+<section id="sheet">
+ <div class="wrap">
+  <div class="kicker reveal in">01 · Why databases exist</div>
+  <h2 class="reveal in">The Night the Spreadsheet Broke</h2>
+  <p class="lead reveal in">Zwiggy stores everything in one file: <code>orders_master.xlsx</code>. Each row holds a full order — customer, phone, restaurant, restaurant's phone, dish, price. It is 80,000 rows now. Last Tuesday, one restaurant changed its phone number. Chaos followed.</p>
+
+  <div class="note reveal in"><b>Analogy first.</b> Imagine writing your home address on every page of every notebook you own. Then you move house. You must fix thousands of pages, and you <em>will</em> miss some. Storing the same fact many times is a promise to eventually contradict yourself.</div>
+
+  <h3 class="reveal in">Three ways one big sheet breaks</h3>
+  <div class="grid3 reveal in">
+    <div class="card"><h4>Update anomaly</h4><p class="muted" style="font-size:14px">One real change = thousands of cell edits. Miss a few, and the sheet holds two "truths".</p></div>
+    <div class="card"><h4>Insert anomaly</h4><p class="muted" style="font-size:14px">Can't add a new restaurant until it has an order. The row demands order details that don't exist yet.</p></div>
+    <div class="card"><h4>Delete anomaly</h4><p class="muted" style="font-size:14px">Delete a restaurant's only order and the restaurant itself vanishes from your data.</p></div>
+  </div>
+
+  <div class="lab">
+    <h4 style="margin-top:4px">⚡ Break the spreadsheet yourself</h4>
+    <p class="muted" style="font-size:14px">Spice Villa changes its phone number. Press the button in <strong>one big sheet</strong> mode and watch the edit sweep the phone column — and miss a row. Then switch to <strong>linked tables</strong> and do the same change. Count the cells each way. Try the delete too.</p>
+    <div class="chips">
+      <button class="btn active" id="flatModeSheet">one big sheet</button>
+      <button class="btn" id="flatModeLinked">linked tables</button>
+      <span style="flex:1"></span>
+      <button class="btn" id="flatPhone">Spice Villa changes phone ▶</button>
+      <button class="btn" id="flatDelete">delete Chaat Adda's only order</button>
+      <button class="btn" id="flatReset">↺ reset</button>
+    </div>
+    <canvas id="flatCanvas" width="476" height="178" style="width: 100%; height: 162.237px;"></canvas>
+    <div class="readout" id="flatOut">one big sheet: Spice Villa's phone is copied on <span class="hl">4 of 10</span> visible rows.
+(imagine 8,452 of 80,000 in the real file)
+→ press a button above</div>
+  </div>
+
+  <h4 class="reveal in">Where this shows up in ML</h4>
+  <p class="reveal in">Models trust data blindly. If one restaurant is spelled three ways, a demand model sees three weak restaurants instead of one strong one. Most "model bugs" in industry are storage bugs like this, inherited by the training set.</p>
+
+  <div class="key reveal in"><b>Key insight.</b> Store every fact <strong>exactly once</strong>. Everything else tonight — tables, keys, schema — is the machinery that makes "once" possible.</div>
+  <p class="muted reveal in"><b>Bridge →</b> If not a giant sheet, then what? A warehouse with a librarian.</p>
+ </div>
+</section>
+
+<section id="dbms">
+ <div class="wrap">
+  <div class="kicker reveal in">02 · The warehouse and its guard</div>
+  <h2 class="reveal in">The Database and the Librarian (DBMS)</h2>
+  <p class="lead reveal in">A <strong>database</strong> is an organised collection of data. A <strong>DBMS</strong> (database management system — MySQL, PostgreSQL, SQLite) is the software that guards it. You never touch the files. You hand the DBMS a request written in <strong>SQL</strong>, and it brings back a result table.</p>
+
+  <div class="note reveal in"><b>Analogy first.</b> A library, and a librarian. You don't wander the shelves rearranging books. You hand over a request slip — "every book by this author, newest first" — and wait at the desk. The librarian knows the catalogue, fetches fast, and stops two people from rewriting the same book at once. Your SQL query <em>is</em> that slip.</div>
+
+  <p class="reveal in">SQL is <strong>declarative</strong>: you say <em>what</em> you want, never <em>how</em> to fetch it. The DBMS plans the how. Compare that with Pandas, where you run each step yourself, in order.</p>
+
+  <div class="lab">
+    <h4 style="margin-top:4px">⚡ The round trip: follow your request</h4>
+    <p class="muted" style="font-size:14px">Press <strong>step</strong> to walk one request through the system. Then flip to <strong>do-it-yourself mode</strong> — the spreadsheet way — and see what changes. Watch who does the searching in each mode.</p>
+    <div class="chips">
+      <button class="btn active" id="libModeLib">librarian (SQL)</button>
+      <button class="btn" id="libModeDIY">do-it-yourself (Excel)</button>
+      <span style="flex:1"></span>
+      <button class="btn" id="libStep">step ▸</button>
+      <button class="btn" id="libAuto">auto ▶</button>
+      <button class="btn" id="libReset">↺ reset</button>
+    </div>
+    <canvas id="libCanvas" width="476" height="130" style="width: 100%; height: 118.201px;"></canvas>
+    <div class="readout" id="libOut">stage 1/5: you have a question: "top rated restaurants in Pune?"</div>
+  </div>
+
+  <h4 class="reveal in">Where this shows up in ML</h4>
+  <p class="reveal in">Nearly every training dataset began life as a SQL query someone ran against a company database. Analysts spend more hours in SQL than in model code. It is the first screen in most data interviews.</p>
+
+  <div class="key reveal in"><b>Pitfall.</b> "Database" and "DBMS" are not synonyms. The database is the organised data; the DBMS is the guard software. Saying "MySQL is a database" is like saying "the librarian is the library". Interviewers love this one.</div>
+
+  <div class="recall reveal in">
+    <div class="q">Check yourself: Zwiggy's app and your Pandas notebook both need order data. Who is the only one allowed to read the data files directly?</div>
+    <button class="btn" data-recall="">Reveal answer</button>
+    <div class="ans">The DBMS. Every reader — app, notebook, dashboard — goes through it with a query. That single doorway is what keeps the data consistent.</div>
+  </div>
+  <p class="muted reveal in"><b>Bridge →</b> So what exactly sits inside the warehouse? Tables. Let's dissect one.</p>
+ </div>
+</section>
+
+<section id="anatomy">
+ <div class="wrap">
+  <div class="kicker reveal in">03 · The building block</div>
+  <h2 class="reveal in">Anatomy of a Table: Rows, Columns, Cells</h2>
+  <p class="lead reveal in">Everything in a relational database lives in a <strong>table</strong>: a named grid. A <strong>column</strong> is one kind of fact, with a name and a type. A <strong>row</strong> is one complete record. A <strong>cell</strong> is one single fact, where a row meets a column.</p>
+
+  <div class="note reveal in"><b>You already know this shape.</b> A table is a DataFrame that grew up. Same grid you used for eight weeks — plus rules. Columns are <strong>typed</strong> (a numeric <code>price</code> column refuses the text "free"). Every row has the same columns. And rows have <strong>no built-in order</strong> — there is no "row 7", only "the row whose id is 103".<p></p></div>
+
+  <h3 class="reveal in">The one question professionals ask first: the grain</h3>
+  <p class="reveal in">The <strong>grain</strong> is what one row <em>means</em>. In <code>orders</code>, one row = one order. In <code>order_items</code>, one row = one dish inside one order. Misread the grain and every count you make afterwards is wrong.</p>
+
+  <div class="lab">
+    <h4 style="margin-top:4px">⚡ Hover the grid, then beat the quiz</h4>
+    <p class="muted" style="font-size:14px">Move your mouse over the table. The row, column, and cell under the cursor light up. The console reads each one aloud. Then press <strong>start quiz</strong> and click what it asks for. Finally, flip the table with the grain buttons and answer the grain question.</p>
+    <div class="chips">
+      <button class="btn" id="anaQuiz">start quiz</button>
+      <span class="muted" id="anaQ" style="font-size:13.5px"></span>
+      <span style="flex:1"></span>
+      <button class="btn active" id="anaTblOrders">orders</button>
+      <button class="btn" id="anaTblItems">order_items</button>
+    </div>
+    <canvas id="anaCanvas" width="476" height="193" style="width: 100%; height: 175.679px;"></canvas>
+    <div class="chips" id="anaGrainChips" style="display:none">
+      <span class="muted" style="font-size:13.5px">One row of this table means…</span>
+      <button class="btn" data-grain="order">one order</button>
+      <button class="btn" data-grain="line">one dish inside one order</button>
+      <button class="btn" data-grain="cust">one customer</button>
+    </div>
+    <div class="readout" id="anaOut">CELL  = one fact: <span class="g">Priya</span>
+ROW   3 = one complete record: <span class="hl">[103, Priya, Paneer Pizza, 420]</span>
+COLUMN "customer" = same kind of fact for every row - name (TEXT)</div>
+  </div>
+
+  <h4 class="reveal in">Where this shows up in ML</h4>
+  <p class="reveal in">A feature matrix is a table whose grain <em>you</em> chose: one row per customer, per order, or per day. Choosing the grain is the first act of feature engineering. Feature stores are databases of exactly such tables.</p>
+
+  <div class="key reveal in"><b>Pitfall.</b> Spreadsheet veterans say "the third row". Databases promise no row order at all — a table is a <em>bag</em> of rows until you sort it in a query. Name rows by key, never by position.</div>
+  <p class="muted reveal in"><b>Bridge →</b> "Name rows by key." What key? That's the next idea — and Zwiggy has two Munna Kumars waiting to break it.</p>
+ </div>
+</section>
+
+<section id="pk">
+ <div class="wrap">
+  <div class="kicker reveal in">04 · The unique label</div>
+  <h2 class="reveal in">Primary Keys: Every Row Gets an Aadhaar</h2>
+  <p class="lead reveal in">An angry call arrives: "Where is my biryani?" — from <strong>Munna Kumar</strong>. Zwiggy has two of those. Which one is starving? Without a guaranteed-unique label per row, you cannot say. That label is the <strong>primary key</strong> (PK).</p>
+
+  <div class="card reveal in" style="border-left: 4px solid var(--cyan); background: rgba(56, 240, 216, 0.05);">
+    <h4 style="margin:0 0 6px; color: var(--cyan);">DEFINITION: PRIMARY KEY (PK)</h4>
+    <p class="muted" style="font-size:14.5px; margin:0;">
+      A <strong>Primary Key (PK)</strong> is a column (or set of columns) in a table that uniquely identifies each row. It must be unique, never NULL, and stable over time.
+    </p>
+  </div>
+  
+  <div class="card reveal in">
+    <h4>Example: Primary Key in Customers Table</h4>
+    <p class="muted" style="font-size:14px; margin-bottom: 12px;">Here, <code>customer_id</code> is the <strong>Primary Key</strong>. Even if we have two customers named "Munna Kumar", they have different primary keys (2 and 4), making each record uniquely identifiable.</p>
+    <div class="tblwrap">
+      <table class="tt" style="width:100%;">
+        <thead>
+          <tr style="background: var(--panel2);">
+            <th style="border: 2px solid var(--cyan); color: var(--cyan); font-weight: bold;">customer_id (PK ★)</th>
+            <th>name</th>
+            <th>city</th>
+            <th>phone</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border: 2px solid var(--cyan); background: rgba(56, 240, 216, 0.1); color: var(--cyan); font-weight: bold;">1</td>
+            <td>Ananya Iyer</td>
+            <td>Bengaluru</td>
+            <td>98450-11111</td>
+          </tr>
+          <tr>
+            <td style="border: 2px solid var(--cyan); background: rgba(56, 240, 216, 0.1); color: var(--cyan); font-weight: bold;">2</td>
+            <td style="font-weight: bold; color: #fff;">Munna Kumar</td>
+            <td>Pune</td>
+            <td>98200-22222</td>
+          </tr>
+          <tr>
+            <td style="border: 2px solid var(--cyan); background: rgba(56, 240, 216, 0.1); color: var(--cyan); font-weight: bold;">3</td>
+            <td>Priya Patel</td>
+            <td>Mumbai</td>
+            <td>98200-33333</td>
+          </tr>
+          <tr>
+            <td style="border: 2px solid var(--cyan); background: rgba(56, 240, 216, 0.1); color: var(--cyan); font-weight: bold;">4</td>
+            <td style="font-weight: bold; color: #fff;">Munna Kumar</td>
+            <td>Pune</td>
+            <td>98550-44444</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note reveal in"><b>Analogy first.</b> India met this exact problem at national scale. Names repeat, addresses change, phone numbers get recycled — so Aadhaar gives each person one permanent, meaningless, unique number. Your college does it with roll numbers. A primary key is a roll number for rows.</div>
+
+  <!-- Interactive Database Aadhaar Card Generator -->
+  <div class="card reveal in" style="margin-top:20px;">
+    <h4>⚡ Holographic Database Aadhaar Generator</h4>
+    <p class="muted" style="font-size:14px; margin-bottom: 16px;">Type a customer name to dynamically generate a unique, non-null, stable <strong>Primary Key (Aadhaar Card)</strong> inside the database engine:</p>
+    
+    <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:center; justify-content:center;">
+      <div style="flex:1; min-width:260px;">
+        <label class="muted" style="font-size:12px; font-weight:bold; display:block; margin-bottom:6px;">ENTER CUSTOMER NAME:</label>
+        <input type="text" id="aadhaarInputName" value="Munna Kumar" style="width:100%; padding:10px 14px; background:var(--panel2); border:1px solid var(--line); border-radius:8px; color:#fff; font-family:var(--mono); font-size:14px; outline:none; margin-bottom:12px;">
+        <button class="btn" id="generateAadhaarBtn" style="width:100%">⚡ Generate PK Aadhaar Card</button>
+      </div>
+      
+      <!-- Visual Card -->
+      <div class="aadhaar-card" id="aadhaarCardVisual" style="width:340px; height:190px; background:linear-gradient(135deg, rgba(14,23,41,0.9), rgba(20,40,80,0.85)); border:2px solid var(--cyan); border-radius:14px; padding:16px; position:relative; box-shadow:0 0 20px rgba(56,240,216,0.15); overflow:hidden; font-family:var(--mono); display:flex; flex-direction:column; justify-content:space-between;">
+        <!-- Glowing Hologram watermarks -->
+        <div style="position:absolute; right:-20px; top:-20px; width:100px; height:100px; border-radius:50%; background:rgba(56,240,216,0.06); filter:blur(20px);"></div>
+        <div style="position:absolute; left:-20px; bottom:-20px; width:100px; height:100px; border-radius:50%; background:rgba(155,140,255,0.06); filter:blur(20px);"></div>
+        
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(56,240,216,0.25); padding-bottom:8px;">
+          <span style="font-size:10px; font-weight:bold; color:var(--cyan); letter-spacing:1px;">CODEWITHMUNNAX DB</span>
+          <span class="pill" style="font-size:8px; padding:1px 6px; background:rgba(56,240,216,0.15); border-color:var(--cyan); color:var(--cyan); text-transform:uppercase;">UNIQUE ROW ID</span>
+        </div>
+        
+        <div style="display:flex; gap:12px; align-items:center; margin-top:10px;">
+          <!-- SVG Avatar -->
+          <svg style="width:48px; height:48px; border-radius:8px; background:rgba(255,255,255,0.05); padding:4px; border:1px solid rgba(255,255,255,0.1);" viewBox="0 0 24 24">
+            <path fill="var(--cyan)" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+          </svg>
+          <div style="flex:1;">
+            <div id="aadhaarCardName" style="font-size:15px; font-weight:bold; color:#fff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Munna Kumar</div>
+            <div style="font-size:10px; color:var(--muted); margin-top:2px;">ROLE: customer_row</div>
+            <div style="font-size:10px; color:var(--muted);">STATUS: PRIMARY_KEY_VALID✓</div>
+          </div>
+        </div>
+        
+        <div style="border-top:1px dashed rgba(255,255,255,0.1); padding-top:8px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:8px; color:var(--muted);">PK (Aadhaar Number):</div>
+            <div id="aadhaarCardPK" style="font-size:14px; font-weight:bold; color:var(--cyan); letter-spacing:1.5px;">PK-CUST-84920</div>
+          </div>
+          <!-- Barcode representation -->
+          <div style="display:flex; gap:1.5px; height:18px; align-items:flex-end; opacity:0.65;">
+            <div style="width:1.5px; height:18px; background:var(--cyan);"></div>
+            <div style="width:2.5px; height:18px; background:var(--cyan);"></div>
+            <div style="width:1px; height:18px; background:var(--cyan);"></div>
+            <div style="width:3px; height:18px; background:var(--cyan);"></div>
+            <div style="width:1.5px; height:18px; background:var(--cyan);"></div>
+            <div style="width:1px; height:18px; background:var(--cyan);"></div>
+            <div style="width:2.5px; height:18px; background:var(--cyan);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="reveal in">The three-question audit</h3>
+  <p class="reveal in">A column being auditioned is a <strong>candidate key</strong>. Ask three questions. Is it <strong>unique</strong> for every row, forever? Is it <strong>always present</strong> — never blank? Is it <strong>stable</strong> — never edited later? One "no" and the candidate is out.</p>
+
+  <div class="lab">
+    <h4 style="margin-top:4px">⚡ Audit the candidates yourself</h4>
+    <p class="muted" style="font-size:14px">Pick a candidate column. Duplicates turn <span style="color:var(--red)">red</span>, blanks turn <span style="color:var(--amber)">amber</span>, and the console delivers the verdict. Then press <strong>+3 signups</strong> to grow the table and watch which candidates crack under growth.</p>
+    <div class="chips">
+      <span class="muted" style="font-size:13px">candidate:</span>
+      <button class="btn" data-cand="1">name</button>
+      <button class="btn" data-cand="2">email</button>
+      <button class="btn" data-cand="3">phone</button>
+      <button class="btn active" data-cand="0">customer_id</button>
+      <span style="flex:1"></span>
+      <button class="btn" id="pkGrow">+3 signups</button>
+      <button class="btn" id="pkReset">↺ reset</button>
+    </div>
+    <canvas id="pkCanvas" width="476" height="195" style="width: 100%; height: 177.07px;"></canvas>
+    <div class="readout" id="pkOut">auditing candidate: <span class="hl">customer_id</span>
+unique for every row?   <span class="g">yes</span>
+always present?         <span class="g">yes</span>
+stable over time?       <span class="g">yes</span>   (system-assigned, never edited)
+<span class="g">VERDICT: passes all three - fit to be PRIMARY KEY.</span></div>
+  </div>
+
+  <p class="reveal in">A key built from real-world data (email, phone) is a <strong>natural key</strong>. A made-up id assigned by the system is a <strong>surrogate key</strong>. Real systems choose surrogates, because the audit above keeps ending the same way: the real world changes; meaningless labels don't.</p>
+
+  <h4 class="reveal in">Where this shows up in ML</h4>
+  <p class="reveal in">You met broken keys in Part 2: merging DataFrames on a column with duplicates silently multiplied rows. Duplicated rows then leak between train and test splits — and your accuracy becomes a lie. Clean keys guard honest models.</p>
+
+  <div class="key reveal in"><b>Pitfall.</b> Never use phone or email as a primary key. Families share phones, telecoms recycle numbers, people change emails, and some fields arrive blank. And never edit a key's value later — every pointer to it would dangle.</div>
+  <p class="muted reveal in"><b>Bridge →</b> Unique labels at home. Now: how does <em>another</em> table point at them?</p>
+ </div>
+</section>
+
+<section id="fk">
+ <div class="wrap">
+  <div class="kicker reveal in">05 · Tables hold hands</div>
+  <h2 class="reveal in">Foreign Keys: Pointers with a Bodyguard</h2>
+  <p class="lead reveal in">Customers live in <code>customers</code>, orders in <code>orders</code>. But an order belongs to a customer. So each order stores one small thing: the customer's primary key. A column holding another table's PK values is a <strong>foreign key</strong> (FK).</p>
+
+  <div class="card reveal in" style="border-left: 4px solid var(--violet); background: rgba(155, 140, 255, 0.05);">
+    <h4 style="margin:0 0 6px; color: var(--violet);">DEFINITION: FOREIGN KEY (FK)</h4>
+    <p class="muted" style="font-size:14.5px; margin:0;">
+      A <strong>Foreign Key (FK)</strong> is a column in a table that links to the Primary Key (PK) of another table. It acts as a cross-reference or pointer to establish a relationship.
+    </p>
+  </div>
+  
+  <div class="card reveal in">
+    <h4>Example: Foreign Key linking Orders to Customers</h4>
+    <p class="muted" style="font-size:14px; margin-bottom: 12px;">Here, <code>customer_id</code> in the <code>orders</code> table is a <strong>Foreign Key (FK)</strong> that points directly to the <code>customer_id</code> in the <code>customers</code> table.</p>
+    
+    <div class="grid2">
+      <div class="tblwrap">
+        <h5 style="margin:0 0 6px; color: #fff;">customers (Parent Table)</h5>
+        <table class="tt" style="width:100%;">
+          <thead>
+            <tr style="background: var(--panel2);">
+              <th style="border: 2px solid var(--cyan); color: var(--cyan); font-weight: bold;">customer_id (PK ★)</th>
+              <th>name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 2px solid var(--cyan); background: rgba(56, 240, 216, 0.1); color: var(--cyan); font-weight: bold;">1</td>
+              <td>Ananya Iyer</td>
+            </tr>
+            <tr>
+              <td style="border: 2px solid var(--cyan); background: rgba(56, 240, 216, 0.1); color: var(--cyan); font-weight: bold;">2</td>
+              <td style="font-weight: bold; color: #fff;">Munna Kumar</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="tblwrap">
+        <h5 style="margin:0 0 6px; color: #fff;">orders (Child Table)</h5>
+        <table class="tt" style="width:100%;">
+          <thead>
+            <tr style="background: var(--panel2);">
+              <th>order_id</th>
+              <th style="border: 2px solid var(--violet); color: var(--violet); font-weight: bold;">customer_id (FK →)</th>
+              <th>amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>101</td>
+              <td style="border: 2px solid var(--violet); background: rgba(155, 140, 255, 0.1); color: var(--violet); font-weight: bold;">2</td>
+              <td>540</td>
+            </tr>
+            <tr>
+              <td>102</td>
+              <td style="border: 2px solid var(--violet); background: rgba(155, 140, 255, 0.1); color: var(--violet); font-weight: bold;">1</td>
+              <td>260</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="note reveal in"><b>Analogy first.</b> A cloakroom token. The token is tiny, but it points at exactly one bag on one hook. And there's an attendant. Nobody gets a token for a hook that doesn't exist. No bag is discarded while someone holds its token. That attendant is called <strong>referential integrity</strong>.</div>
+
+  <div class="lab">
+    <h4 style="margin-top:4px">⚡ Click an order — then try to break the rules</h4>
+    <p class="muted" style="font-size:14px">Click any row of <code>orders</code> and watch its pointer fly to the matching customer. Then try the two red buttons. Insert an order pointing at customer <strong>999</strong>, who doesn't exist. Delete customer <strong>2</strong>, who has orders. The bodyguard reacts.</p>
+    <div class="chips">
+      <button class="btn" id="fkInsert">insert order → customer 999</button>
+      <button class="btn" id="fkDelete">delete customer 2</button>
+      <button class="btn" id="fkReset">↺ reset</button>
+    </div>
+    <canvas id="fkCanvas" width="476" height="190" style="width: 100%; height: 172.434px;"></canvas>
+    <div class="readout" id="fkOut">click any order row to trace its pointer…</div>
+  </div>
+
+  <h4 class="reveal in">Where this shows up in ML</h4>
+  <p class="reveal in">Building "average order value per city" means walking <code>orders → customers</code> through this key. Next week's <strong>joins</strong> are foreign keys in action. Broken pointers surface in Pandas as mystery <code>NaN</code>s after a merge.</p>
+
+  <div class="lab">
+    <h4 style="margin-top:4px">⚡ Visual JOIN Types Simulator</h4>
+    <p class="muted" style="font-size:14px">Explore the differences between SQL JOIN types. Match tables on <code>customer_id</code>. Note: Customer 4 (Munna Kumar) has no orders. Order 104 belongs to customer 1. Order 105 points at customer <strong>999</strong> who is missing.</p>
+    
+    <div class="venn-container">
+      <div class="chips">
+        <button class="btn active" id="joinTypeInner">INNER JOIN</button>
+        <button class="btn" id="joinTypeLeft">LEFT JOIN</button>
+        <button class="btn" id="joinTypeRight">RIGHT JOIN</button>
+      </div>
+      
+      <svg class="venn-svg" viewBox="0 0 200 120" style="width: 220px; height: 130px;">
+        <defs>
+          <clipPath id="clipLeft">
+            <circle cx="80" cy="70" r="34" />
+          </clipPath>
+        </defs>
+        <circle cx="80" cy="70" r="34" stroke="var(--cyan)" stroke-width="2" fill="none" opacity="0.8" />
+        <circle cx="120" cy="70" r="34" stroke="var(--violet)" stroke-width="2" fill="none" opacity="0.8" />
+        
+        <circle id="vennLeftCircle" cx="80" cy="70" r="34" fill="var(--cyan)" fill-opacity="0.05" />
+        <circle id="vennRightCircle" cx="120" cy="70" r="34" fill="var(--violet)" fill-opacity="0.05" />
+        <circle id="vennIntersect" cx="120" cy="70" r="34" clip-path="url(#clipLeft)" fill="#38f0d8" fill-opacity="0.85" />
+        
+        <text x="70" y="24" font-size="9" font-family="monospace" fill="var(--cyan)" font-weight="bold" text-anchor="middle">Orders</text>
+        <text x="130" y="24" font-size="9" font-family="monospace" fill="var(--violet)" font-weight="bold" text-anchor="middle">Customers</text>
+      </svg>
+    </div>
+
+    <div class="chips">
+      <button class="btn" id="joinBtn">Run JOIN Query ▸</button>
+      <button class="btn" id="joinReset">↺ reset</button>
+    </div>
+    <canvas id="joinCanvas" width="476" height="190" style="width: 100%; height: 180px;"></canvas>
+    <div class="readout" id="joinOut">SELECT * FROM orders INNER JOIN customers ON orders.customer_id = customers.customer_id;</div>
+  </div>
+
+  <div class="key reveal in"><b>Pitfall.</b> A foreign key may repeat — customer 2 on many orders is correct and normal. Uniqueness is the <em>primary</em> key's job, in its own table. PK = unique label at home. FK = repeatable pointer from elsewhere.</div>
+
+  <div class="recall reveal in">
+    <div class="q">Check yourself: could Zwiggy store the customer's name and phone on every order row instead of a pointer? What goes wrong?</div>
+    <button class="btn" data-recall="">Reveal answer</button>
+    <div class="ans">That's the Section 01 disaster again: the same fact stored thousands of times. When the customer changes their phone, you edit every order they ever placed — and miss some. Store the fact once; point at it everywhere else.</div>
+  </div>
+  <p class="muted reveal in"><b>Bridge →</b> Pointers connect two tables. But <em>how many</em> of these go with how many of those? Three shapes cover every case.</p>
+ </div>
+</section>
+
+<section id="rel">
+ <div class="wrap">
+  <div class="kicker reveal in">06 · The three shapes</div>
+  <h2 class="reveal in">Relationship Shapes: 1:1, 1:N, N:M</h2>
+  <p class="lead reveal in">Every pair of tables has a shape, and two questions find it. <strong>Can one A have many B? Can one B have many A?</strong> No–no means 1:1. Yes–no means 1:N. Yes–yes means N:M — and N:M needs a trick.</p>
+
+  <div class="note reveal in"><b>The trick for N:M.</b> One order holds many dishes; one dish appears in many orders. Neither table can store the pointer — a cell can't hold "dishes 7, 12, 31". So a third table steps in: a <strong>junction table</strong>. <code>order_items</code> has one row per (order, dish) pair, plus pair-level facts like <code>quantity</code>. Your CodeWithMunnaX enrolment works the same way: students, courses, and an enrolment register between them.<p></p></div>
+
+  <p class="reveal in">Where does the FK live? Always on the <strong>many</strong> side. One customer, many orders → <code>orders</code> carries <code>customer_id</code>. The "one" side stays clean.</p>
+
+  <div class="lab">
+    <h4 style="margin-top:4px">⚡ The classifier game — 6 rounds</h4>
+    <p class="muted" style="font-size:14px">Read the pair, ask the two questions in your head, then answer. The canvas draws the true shape after each round. Play to 6/6 — in class, shout your answer before clicking.</p>
+    <div class="chips">
+      <span class="muted" id="relQ" style="font-size:14.5px;font-weight:700">round 1/6:  customer  ↔  order</span>
+      <span style="flex:1"></span>
+      <span class="pill" id="relScore">score 0/0</span>
+    </div>
+    <div class="chips">
+      <button class="btn" data-rel="11">1 : 1</button>
+      <button class="btn" data-rel="1N">1 : N</button>
+      <button class="btn" data-rel="NM">N : M</button>
+      <button class="btn" id="relNext" style="margin-left:auto">next round ▶</button>
+    </div>
+    <canvas id="relCanvas" width="476" height="174" style="width: 100%; height: 158.065px;"></canvas>
+    <div class="readout" id="relOut">ask both questions:
+can one customer have many orders?
+can one order have many customers?</div>
+  </div>
+
+  <h4 class="reveal">Where this shows up in ML</h4>
+  <p class="reveal">Shapes predict row counts after joins. Join orders→customers (many-to-one): row count unchanged. Join orders→order_items (one-to-many): rows multiply. Analysts who forget this double-count revenue. You saw the same effect in Pandas merges.</p>
+
+  <div class="key reveal"><b>Pitfall.</b> Never model N:M by stuffing a list into one cell ("7,12,31") or adding <code>dish_1, dish_2, dish_3</code> columns. Both designs cap growth and make counting nearly impossible. Two yes answers = junction table, every time.</div>
+  <p class="muted reveal"><b>Bridge →</b> You now hold every piece. Time to design Zwiggy's blueprint, live.</p>
+ </div>
+</section>
+
+<section id="schema">
+ <div class="wrap">
+  <div class="kicker reveal">07 · The blueprint</div>
+  <h2 class="reveal">Design Zwiggy's Schema, Step by Step</h2>
+  <p class="lead reveal">A <strong>schema</strong> is the blueprint: which tables exist, their columns and types, their keys, and the links between them. Architects draw before laying bricks. Analysts draw before loading data. Six moves, one recipe you can reuse on any business.</p>
+
+  <div class="card reveal">
+    <h4>The six moves</h4>
+    <p class="muted" style="font-size:14.5px">
+      1&nbsp;·&nbsp;List the <strong>nouns</strong> the business talks about — each becomes a table.&nbsp;&nbsp;
+      2&nbsp;·&nbsp;Say each table's <strong>grain</strong> out loud.&nbsp;&nbsp;
+      3&nbsp;·&nbsp;Give every table a surrogate <strong>primary key</strong>.&nbsp;&nbsp;
+      4&nbsp;·&nbsp;Attach each <strong>fact</strong> to the one table where it's true once.&nbsp;&nbsp;
+      5&nbsp;·&nbsp;Classify every <strong>relationship</strong>; place FKs; junction for N:M.&nbsp;&nbsp;
+      6&nbsp;·&nbsp;<strong>Hunt repetition</strong> — any fact that would repeat sits on the wrong table.
+    </p>
+  </div>
+
+  <div class="lab">
+    <h4 style="margin-top:4px">⚡ Watch the blueprint assemble itself</h4>
+    <p class="muted" style="font-size:14px">Press <strong>next move</strong> six times and watch Zwiggy's schema grow, one decision at a time. Then hit <strong>the horror version</strong> to see the same business as one giant sheet — count the repeated facts in red.</p>
+    <div class="chips">
+      <button class="btn" id="schStep">next move ▶</button>
+      <button class="btn" id="schBack">◀ back</button>
+      <button class="btn" id="schAuto">auto ▶</button>
+      <button class="btn" id="schHorror">the horror version</button>
+      <button class="btn" id="schReset">↺ reset</button>
+    </div>
+    <canvas id="schCanvas" width="476" height="233" style="width: 100%; height: 211.835px;"></canvas>
+    <div class="readout" id="schOut">step 1/7:
+move 1 - list the nouns: customers, restaurants, dishes, orders.
+each noun the business talks about becomes a table.</div>
+  </div>
+
+  <div class="matcher-box">
+    <h4 style="margin-top:0">⚡ Hands-on: Link Zwiggy's ER Schema!</h4>
+    <p class="muted" style="font-size:14px">Link the primary keys (★) and foreign keys (→) to complete Zwiggy's database schema. Click a column in one table, then click the matching key in another table. Connect all 5 relationships!</p>
+    
+    <div class="matcher-workspace" id="matcherWorkspace">
+      <canvas class="matcher-canvas" id="matcherCanvas"></canvas>
+      
+      <!-- Tables -->
+      <div class="matcher-table" style="left: 10px; top: 35px;" id="m-customers">
+        <div class="matcher-table-title">customers</div>
+        <div class="matcher-col" data-table="customers" data-col="customer_id" data-type="pk">customer_id ★</div>
+        <div class="matcher-col" data-table="customers" data-col="name">name</div>
+        <div class="matcher-col" data-table="customers" data-col="city">city</div>
+      </div>
+      
+      <div class="matcher-table" style="left: 165px; top: 10px;" id="m-orders">
+        <div class="matcher-table-title">orders</div>
+        <div class="matcher-col" data-table="orders" data-col="order_id" data-type="pk">order_id ★</div>
+        <div class="matcher-col" data-table="orders" data-col="customer_id" data-type="fk">customer_id →</div>
+        <div class="matcher-col" data-table="orders" data-col="restaurant_id" data-type="fk">restaurant_id →</div>
+        <div class="matcher-col" data-table="orders" data-col="amount">amount</div>
+      </div>
+
+      <div class="matcher-table" style="left: 165px; top: 150px;" id="m-order_items">
+        <div class="matcher-table-title">order_items</div>
+        <div class="matcher-col" data-table="order_items" data-col="order_id" data-type="fk">order_id →</div>
+        <div class="matcher-col" data-table="order_items" data-col="dish_id" data-type="fk">dish_id →</div>
+        <div class="matcher-col" data-table="order_items" data-col="quantity">quantity</div>
+      </div>
+
+      <div class="matcher-table" style="left: 325px; top: 10px;" id="m-restaurants">
+        <div class="matcher-table-title">restaurants</div>
+        <div class="matcher-col" data-table="restaurants" data-col="restaurant_id" data-type="pk">restaurant_id ★</div>
+        <div class="matcher-col" data-table="restaurants" data-col="name">name</div>
+        <div class="matcher-col" data-table="restaurants" data-col="rating">rating</div>
+      </div>
+
+      <div class="matcher-table" style="left: 325px; top: 140px;" id="m-dishes">
+        <div class="matcher-table-title">dishes</div>
+        <div class="matcher-col" data-table="dishes" data-col="dish_id" data-type="pk">dish_id ★</div>
+        <div class="matcher-col" data-table="dishes" data-col="restaurant_id" data-type="fk">restaurant_id →</div>
+        <div class="matcher-col" data-table="dishes" data-col="name">name</div>
+      </div>
+    </div>
+    
+    <div class="chips" style="margin-top: 15px;">
+      <button class="btn" id="matcherReset">↺ reset matcher</button>
+      <span style="flex: 1;"></span>
+      <span class="pill" id="matcherScore">Links: 0 / 5</span>
+    </div>
+    <div class="readout" id="matcherOut" style="margin-top: 10px;">Select a column to start connecting the schema...</div>
+  </div>
+
+  <p class="reveal">The repetition-hunting instinct has a formal rulebook called <strong>normalization</strong> (1NF, 2NF, 3NF) — it arrives on 27 July. Tonight you learned the instinct the rulebook formalises.</p>
+
+  <h4 class="reveal">Where this shows up in ML</h4>
+  <p class="reveal">Every analytics warehouse is this pattern at scale — the "star schema" behind dashboards. Fact tables (orders) in the middle, descriptive tables (customers, restaurants) around them. Your feature pipelines will walk this shape, key by key.</p>
+
+  <div class="key reveal"><b>Pitfall.</b> No <code>orders_delhi</code>, <code>orders_pune</code>, <code>orders_july</code> tables. "Delhi" is data, so it lives <em>inside</em> a column. Splitting tables by data values is the second-most-common beginner bug, right after copying facts everywhere.</div>
+
+  <div class="recall reveal">
+    <div class="q">Check yourself: Zwiggy adds delivery partners. One partner delivers many orders; an order has one partner. What changes in the schema?</div>
+    <button class="btn" data-recall="">Reveal answer</button>
+    <div class="ans">Add a <code>partners</code> table (partner_id ★, name, phone…) and one FK column <code>orders.partner_id</code>. Relationship is 1:N, so the pointer sits on the many side — orders. No other table changes.</div>
+  </div>
+ </div>
+</section>
+
+<section id="recap">
+ <div class="wrap">
+  <div class="kicker reveal">08 · Tying it together</div>
+  <h2 class="reveal">Wrap Up &amp; Final Assessment</h2>
+  <p class="lead reveal">One night, five ideas, one blueprint. If you can answer the quiz below without peeking, you own tonight's class.</p>
+
+  <div class="grid3 reveal">
+    <div class="card"><h4>Facts live once</h4><p class="muted" style="font-size:14px">Sheets copy facts; copies disagree. Tables give each fact one home. That single idea drives everything else.</p></div>
+    <div class="card"><h4>Keys make it work</h4><p class="muted" style="font-size:14px">A primary key is a row's permanent unique label. A foreign key points at one — guarded by referential integrity.</p></div>
+    <div class="card"><h4>Schema is the blueprint</h4><p class="muted" style="font-size:14px">Tables + grains + keys + relationships. Two questions classify any pair; junctions handle N:M.</p></div>
+  </div>
+
+  <div class="lab">
+    <h4 style="margin-top:4px">⚡ Final boss: every fact finds its home</h4>
+    <p class="muted" style="font-size:14px">Six facts, five tables. Click the table where each fact lives <strong>once</strong>. This is the exact instinct schema design runs on.</p>
+    <div class="chips">
+      <span class="muted" id="homeQ" style="font-size:14.5px;font-weight:700">where does this fact live once?  “the customer's phone number”</span>
+      <span style="flex:1"></span>
+      <span class="pill" id="homeScore">score 0/0</span>
+    </div>
+    <div class="chips" id="homeChips">
+      <button class="btn" data-home="customers">customers</button>
+      <button class="btn" data-home="restaurants">restaurants</button>
+      <button class="btn" data-home="dishes">dishes</button>
+      <button class="btn" data-home="orders">orders</button>
+      <button class="btn" data-home="order_items">order_items</button>
+    </div>
+    <div class="readout" id="homeOut"></div>
+  </div>
+
+  <div class="play-box reveal">
+    <h4 style="margin-top:0">⚡ Mini SQL Playground</h4>
+    <p class="muted" style="font-size:14px">Write real SQL queries to test your knowledge against Zwiggy's tables: <code>customers</code>, <code>restaurants</code>, and <code>orders</code>. Click a preset query to start, or type your own below!</p>
+    
+    <div class="chips" style="margin-bottom: 12px;">
+      <button class="btn" id="presetQuery1">Show all restaurants</button>
+      <button class="btn" id="presetQuery2">Bengaluru customers</button>
+      <button class="btn" id="presetQuery3">Orders > ₹500</button>
+    </div>
+
+    <div class="play-terminal">
+      <div>-- Type SQL query and press Enter:</div>
+      <div class="play-terminal-input-wrapper">
+        <span>&gt;</span>
+        <input type="text" id="sqlQueryInput" class="play-terminal-input" placeholder="SELECT * FROM customers;" value="SELECT * FROM customers;">
+      </div>
+    </div>
+    
+    <div class="play-table-wrap">
+      <table class="tt" id="sqlPlaygroundResults" style="width: 100%; margin: 0;">
+        <!-- Query results render here -->
+      </table>
+    </div>
+    <div class="readout" id="playgroundOut" style="margin-top: 10px;">Query returned 4 rows.</div>
+  </div>
+
+  <div class="card reveal">
+    <h4>Friday, 8:00 PM sharp: your first queries</h4>
+    <p class="muted" style="font-size:14.5px">The five tables you designed tonight come alive with data. You will choose columns with <code>SELECT</code>, filter rows with <code>WHERE</code>, deduplicate with <code>DISTINCT</code>, sort with <code>ORDER BY</code>, and cut top-10 lists with <code>LIMIT</code>. One taste tonight:</p>
+    <div class="eqbox" style="font-family:var(--mono);font-size:15px;padding:14px 18px">
+      SELECT name, rating FROM restaurants WHERE city = 'Bengaluru';
+      <button class="btn" id="copyQ" style="float:right;margin-left:10px">copy</button>
+    </div>
+    <p class="muted" style="font-size:14px">Read it aloud — it's nearly English. Choose two columns, from that table, Bengaluru rows only. If you can read that tonight, Friday will feel like home.</p>
+  </div>
+
+  <div class="quiz-box reveal" id="quizBox">
+    <h4 style="margin-top:0">⚡ Test Your SQL Knowledge!</h4>
+    <p class="muted" style="font-size:14px">Answer these 5 quick questions to complete your Relational Database Foundations training.</p>
+    
+    <div id="quizQuestionContainer">
+      <div class="quiz-q" id="quizQuestionText">Loading question...</div>
+      <div class="quiz-options" id="quizOptionsContainer">
+        <!-- Options rendered dynamically -->
+      </div>
+    </div>
+    
+    <div class="chips" style="margin-top: 15px;">
+      <span class="pill" id="quizScore">Question 1 / 5</span>
+      <span style="flex: 1;"></span>
+      <span class="pill" id="quizStatus">Score: 0</span>
+    </div>
+    <div class="readout" id="quizOut" style="margin-top: 10px;">Select an option to proceed.</div>
+  </div>
+
+  <div class="chips reveal" style="margin-top:18px">
+    <span class="tag">every fact once</span>
+    <span class="tag">PK = home label</span>
+    <span class="tag">FK = guarded pointer</span>
+    <span class="tag">two questions → shape</span>
+    <span class="tag">schema before data</span>
+  </div>
+ </div>
+</section>
+
+<div class="foot">
+  <div class="foot-brand"><span class="dot"></span>CodeWithMunnaX</div>
+  <div class="foot-links">
+    <a href="https://www.instagram.com/codewithmunnax?igsh=MWdqZWQxd3B1Yjlk" target="_blank" rel="noopener noreferrer">
+      <svg class="icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg> Instagram
+    </a>
+    <a href="https://www.linkedin.com/in/munna-kumar-93234b241" target="_blank" rel="noopener noreferrer">
+      <svg class="icon" viewBox="0 0 24 24"><path fill="currentColor" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg> LinkedIn
+    </a>
+    <a href="https://www.youtube.com/@CodeWithMunnaX" target="_blank" rel="noopener noreferrer">
+      <svg class="icon" viewBox="0 0 24 24"><path fill="currentColor" d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.545 12 3.545 12 3.545s-7.518 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.87.508 9.388.508 9.388.508s7.518 0 9.388-.508a3.002 3.002 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg> YouTube
+    </a>
+  </div>
+  <div class="foot-text">
+    CodeWithMunnaX · Data Science &amp; AI Program · 3 · Companion PDF pairs with this page · Math via MathJax · every visual hand-drawn on canvas.
+  </div>
+</div>
+</main>
+</div>
+
+<script>
+/* ============ shared utilities ============ */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmt=(x,d=3)=>{ if(Math.abs(x)<1e-9)x=0; return x.toFixed(d); };
+
+function setupCanvas(canvas,drawFn){
+  const ctx=canvas.getContext('2d');
+  function resize(){
+    const dpr=Math.max(1,window.devicePixelRatio||1);
+    const rect=canvas.getBoundingClientRect();
+    const cssW=rect.width||canvas.width;
+    const cssH=cssW*(canvas.height/canvas.width);
+    canvas.style.height=cssH+'px';
+    canvas.width=Math.round(cssW*dpr);
+    canvas.height=Math.round(cssH*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    drawFn(ctx,cssW,cssH);
+  }
+  let raf=null;
+  window.addEventListener('resize',()=>{if(raf)cancelAnimationFrame(raf);raf=requestAnimationFrame(resize);});
+  resize();
+  return {redraw:()=>{const dpr=Math.max(1,window.devicePixelRatio||1);
+    drawFn(ctx,canvas.width/dpr,canvas.height/dpr);}};
+}
+
+/* draw a data table on canvas; returns cell rects for hit-testing */
+function drawTableC(ctx,opt){
+  const {x,y,w,title,headers,rows,colFr}=opt;
+  const rowH=opt.rowH||26, headH=24, titleH=24;
+  const cols=headers.length;
+  const fr=colFr||headers.map(()=>1/cols);
+  const cw=fr.map(f=>f*w);
+  ctx.font='700 12px '+'monospace';
+  ctx.fillStyle=opt.titleBg||'#21355E';
+  rr(ctx,x,y,w,titleH,7,true,false);
+  ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(title,x+w/2,y+titleH/2);
+  let cy=y+titleH;
+  const isLight=document.documentElement.getAttribute('data-theme')==='light';
+  ctx.fillStyle=isLight?'#182642':'#121d36';
+  ctx.fillRect(x,cy,w,headH);
+  let cx=x;
+  ctx.fillStyle=isLight?'#e1e8f5':'#93a4c8';
+  for(let j=0;j<cols;j++){
+    ctx.fillText(headers[j],cx+cw[j]/2,cy+headH/2);
+    cx+=cw[j];
+  }
+  cy+=headH;
+  const rects=[];
+  ctx.font='12px monospace';
+  for(let i=0;i<rows.length;i++){
+    const rowInfo=(opt.rowStyle&&opt.rowStyle(i))||{};
+    if(rowInfo.band){ctx.fillStyle=rowInfo.band;ctx.fillRect(x,cy,w,rowH);}
+    cx=x;
+    const rowRects=[];
+    for(let j=0;j<cols;j++){
+      const cellInfo=(opt.cellStyle&&opt.cellStyle(i,j))||{};
+      if(cellInfo.band){ctx.fillStyle=cellInfo.band;ctx.fillRect(cx,cy,cw[j],rowH);}
+      ctx.fillStyle=cellInfo.ink||rowInfo.ink||(isLight?'#1a2b4c':'#c9d6f2');
+      const txt=String(rows[i][j]);
+      ctx.fillText(txt.length>16?txt.slice(0,15)+'…':txt,cx+cw[j]/2,cy+rowH/2);
+      if(cellInfo.ring){ctx.strokeStyle=cellInfo.ring;ctx.lineWidth=2;ctx.strokeRect(cx+1.5,cy+1.5,cw[j]-3,rowH-3);}
+      rowRects.push({x:cx,y:cy,w:cw[j],h:rowH});
+      cx+=cw[j];
+    }
+    ctx.strokeStyle=isLight?'rgba(20,40,80,.12)':'rgba(120,150,210,.16)';ctx.lineWidth=1;
+    ctx.strokeRect(x,cy,w,rowH);
+    rects.push(rowRects);
+    cy+=rowH;
+  }
+  cx=x;
+  for(let j=0;j<cols-1;j++){cx+=cw[j];
+    ctx.beginPath();ctx.moveTo(cx,y+titleH);ctx.lineTo(cx,cy);ctx.stroke();}
+  ctx.textBaseline='alphabetic';ctx.textAlign='left';
+  return {rects, bottom:cy, right:x+w};
+}
+function rr(ctx,x,y,w,h,r,fill,stroke){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
+  if(fill)ctx.fill(); if(stroke)ctx.stroke();
+}
+function arrowC(ctx,x0,y0,x1,y1,color,prog){
+  const p=prog===undefined?1:prog;
+  const mx=(x0+x1)/2, my=Math.min(y0,y1)-26;
+  const pt=t=>{
+    const a=1-t;
+    return {x:a*a*x0+2*a*t*mx+t*t*x1, y:a*a*y0+2*a*t*my+t*t*y1};
+  };
+  ctx.strokeStyle=color;ctx.lineWidth=2.2;
+  ctx.beginPath();
+  for(let t=0;t<=p;t+=0.02){const q=pt(t); t===0?ctx.moveTo(q.x,q.y):ctx.lineTo(q.x,q.y);}
+  ctx.stroke();
+  const e=pt(p), e2=pt(Math.max(0,p-0.04));
+  const ang=Math.atan2(e.y-e2.y,e.x-e2.x);
+  ctx.fillStyle=color;
+  ctx.beginPath();
+  ctx.moveTo(e.x,e.y);
+  ctx.lineTo(e.x-9*Math.cos(ang-0.45),e.y-9*Math.sin(ang-0.45));
+  ctx.lineTo(e.x-9*Math.cos(ang+0.45),e.y-9*Math.sin(ang+0.45));
+  ctx.closePath();ctx.fill();
+}
+
+/* scroll progress + scroll-spy */
+const tocLinks=$$('#toc a');
+const sections=tocLinks.map(a=>$(a.getAttribute('href')));
+function onScroll(){
+  const st=window.scrollY, h=document.body.scrollHeight-window.innerHeight;
+  $('#progbar').style.width=(100*st/(h||1))+'%';
+  let idx=0;
+  sections.forEach((sec,i)=>{ if(sec && sec.offsetTop-120<=st) idx=i; });
+  tocLinks.forEach((a,i)=>a.classList.toggle('active',i===idx));
+  
+  // Force reveal bottom sections if scrolled near the end to prevent observer layout lockups
+  if (h - st < 120) {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+
+window.__demos=[];
+function runDemos(){ window.__demos.forEach(f=>{try{f();}catch(e){console.error(e);}}); }
+
+function initTheme(){
+  const btn=$('#themeBtn'); if(!btn)return;
+  const sync=()=>{const light=document.documentElement.getAttribute('data-theme')==='light';btn.innerHTML=light?'&#127769; Dark':'&#9728; Light';};
+  sync();
+  btn.addEventListener('click',()=>{
+    const root=document.documentElement, light=root.getAttribute('data-theme')==='light';
+    if(light){root.removeAttribute('data-theme');try{localStorage.setItem('lectheme','dark');}catch(e){}}
+    else{root.setAttribute('data-theme','light');try{localStorage.setItem('lectheme','light');}catch(e){}}
+    sync();
+  });
+}
+function initReveal(){
+  if(!('IntersectionObserver' in window))return;
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),
+    {threshold:0.04,rootMargin:'0px 0px -4% 0px'});
+  $$('section .wrap > *').forEach(el=>{
+    if(el.classList.contains('lab')||el.querySelector('canvas')) return;
+    el.classList.add('reveal'); io.observe(el);
+  });
+}
+function initRecall(){
+  $$('[data-recall]').forEach(b=>b.addEventListener('click',function(){
+    const open=this.closest('.recall').classList.toggle('open');
+    this.textContent=open?'Hide':'Reveal answer';
+  }));
+}
+
+/* guided story */
+const STORY=[
+ {id:'intro',t:'Welcome to Zwiggy',x:'You are the first data analyst at a food delivery startup. Tonight: why spreadsheets fail, and the machinery that replaces them. Arrow keys move; space pauses.'},
+ {id:'sheet',t:'The spreadsheet disaster',x:'One restaurant changes its phone; thousands of cells must change. Run the lab both ways and count the edits. This pain is why databases exist.'},
+ {id:'dbms',t:'The librarian',x:'You never touch the shelves. You hand the DBMS a SQL slip and wait at the desk. Step through the round trip, then try the do-it-yourself mode.'},
+ {id:'anatomy',t:'Rows, columns, cells',x:'A table is a typed grid with a grain. Hover the table, then take the click-quiz. Remember: rows have no order; keys name rows.'},
+ {id:'pk',t:'Primary keys',x:'Two Munna Kumars, one angry call. Audit name, email, phone, and id against three questions. Watch which candidates crack when the table grows.'},
+ {id:'fk',t:'Foreign keys',x:'Orders point at customers with one small number. Click an order to trace its pointer. Then try to break referential integrity - the bodyguard says no.'},
+ {id:'rel',t:'The three shapes',x:'Two questions classify any pair of tables: 1:1, 1:N, or N:M. Play all six rounds. N:M always calls a junction table.'},
+ {id:'schema',t:'Design the schema',x:'Six moves take Zwiggy from business nouns to a blueprint. Press next-move and watch it assemble. Peek at the horror version for contrast.'},
+ {id:'recap',t:'Final Assessment',x:'Every fact one home; keys make it work. Beat the final quiz, copy the syntax query, and read the companion PDF before class.'}
+];
+let storyI=0,storyPlaying=false,storyTimer=null,storyActive=false;
+function storySec(){return $('#'+STORY[storyI].id);}
+function positionSpot(){
+  const sec=storySec(); if(!sec)return; const el=sec.querySelector('h1,h2')||sec;
+  const r=el.getBoundingClientRect(), sp=$('#storyspot');
+  sp.style.display='block';
+  sp.style.left=(r.left-12)+'px'; sp.style.top=(r.top-10)+'px';
+  sp.style.width=(r.width+24)+'px'; sp.style.height=(r.height+20)+'px';
+}
+function showStory(){
+  const s=STORY[storyI];
+  $('#storyStep').textContent='Step '+(storyI+1)+' / '+STORY.length;
+  $('#storyTitle').textContent=s.t; $('#storyText').innerHTML=s.x;
+  $$('#storyDots i').forEach((d,i)=>d.classList.toggle('on',i===storyI));
+  const sec=storySec();
+  if(sec){const y=sec.getBoundingClientRect().top+window.scrollY-86;window.scrollTo({top:y,behavior:'smooth'});}
+  setTimeout(positionSpot,520);
+}
+function resetTimer(){clearInterval(storyTimer);if(storyPlaying)storyTimer=setInterval(()=>{if(storyI===STORY.length-1){togglePlay();}else nextStory();},9500);}
+function nextStory(){storyI=(storyI+1)%STORY.length;showStory();resetTimer();}
+function prevStory(){storyI=(storyI-1+STORY.length)%STORY.length;showStory();resetTimer();}
+function togglePlay(){storyPlaying=!storyPlaying;$('#storyPlay').innerHTML=storyPlaying?'&#9208; pause':'&#9654; play';resetTimer();}
+function spotFollow(){if(storyActive)positionSpot();}
+function startStory(){
+  storyActive=true;storyI=0;storyPlaying=true;
+  $('#storycard').style.display='block';$('#storyPlay').innerHTML='&#9208; pause';
+  $('#storyDots').innerHTML=STORY.map((_,i)=>'<i data-i="'+i+'"></i>').join('');
+  $$('#storyDots i').forEach(d=>d.addEventListener('click',()=>{storyI=+d.dataset.i;showStory();resetTimer();}));
+  showStory();resetTimer();
+  window.addEventListener('scroll',spotFollow,{passive:true});
+  window.addEventListener('resize',positionSpot);
+}
+function endStory(){
+  storyActive=false;storyPlaying=false;clearInterval(storyTimer);
+  $('#storycard').style.display='none';$('#storyspot').style.display='none';
+  window.removeEventListener('scroll',spotFollow);window.removeEventListener('resize',positionSpot);
+}
+function initStory(){
+  if(!$('#tourBtn'))return;
+  $('#tourBtn').addEventListener('click',startStory);
+  $('#storyExit').addEventListener('click',endStory);
+  $('#storyNext').addEventListener('click',nextStory);
+  $('#storyPrev').addEventListener('click',prevStory);
+  $('#storyPlay').addEventListener('click',togglePlay);
+  document.addEventListener('keydown',e=>{if(!storyActive)return;
+    if(e.key==='Escape')endStory();else if(e.key==='ArrowRight')nextStory();
+    else if(e.key==='ArrowLeft')prevStory();else if(e.key===' '){e.preventDefault();togglePlay();}});
+}
+
+/* ============ HERO: living schema ============ */
+window.__demos.push(function(){
+  const c=$('#heroCanvas'); if(!c)return; const ctx=c.getContext('2d');
+  const W=c.width,H=c.height;
+  const nodes=[
+    {x:.13,y:.36,t:'customers',col:'#19c4ff'},
+    {x:.50,y:.22,t:'orders',col:'#ffcb6b'},
+    {x:.87,y:.36,t:'restaurants',col:'#62e88a'},
+    {x:.50,y:.76,t:'order_items',col:'#ff6b81'},
+    {x:.87,y:.78,t:'dishes',col:'#9b8cff'}
+  ];
+  const edges=[[1,0],[1,2],[3,1],[3,4],[4,2]];
+  let t=0;
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function frame(){
+    ctx.clearRect(0,0,W,H); t+=0.016;
+    edges.forEach((e,i)=>{
+      const a=nodes[e[0]],b=nodes[e[1]];
+      const op=0.25+0.2*Math.sin(t*1.3+i*1.7);
+      ctx.strokeStyle='rgba(120,150,210,'+op+')';ctx.lineWidth=1.6;
+      ctx.beginPath();ctx.moveTo(a.x*W,a.y*H);ctx.lineTo(b.x*W,b.y*H);ctx.stroke();
+      const k=(t*0.35+i*0.23)%1;
+      const px=a.x*W+(b.x-a.x)*W*k, py=a.y*H+(b.y-a.y)*H*k;
+      ctx.fillStyle='#38f0d8';ctx.beginPath();ctx.arc(px,py,3,0,7);ctx.fill();
+    });
+    nodes.forEach((n,i)=>{
+      const R=38+(reduce?0:2*Math.sin(t*1.4+i));
+      const isLight=document.documentElement.getAttribute('data-theme')==='light';
+      ctx.fillStyle=isLight?'#ffffff':'#0e1729';
+      ctx.strokeStyle=n.col;ctx.lineWidth=2.2;
+      ctx.shadowColor=n.col;ctx.shadowBlur=reduce?0:(isLight?6:10);
+      ctx.beginPath();ctx.arc(n.x*W,n.y*H,R,0,7);ctx.fill();ctx.stroke();
+      ctx.shadowBlur=0;
+      ctx.fillStyle=isLight?'#0d1730':'#e7edf9';ctx.font='700 11px monospace';ctx.textAlign='center';
+      ctx.fillText(n.t,n.x*W,n.y*H+5);
+      ctx.fillText('★',n.x*W,n.y*H-7);
+      ctx.textAlign='left';
+    });
+    if(!reduce)requestAnimationFrame(frame);
+  }
+  frame();
+});
+
+/* ============ 01 FLAT SHEET LAB ============ */
+window.__demos.push(function(){
+  const c=$('#flatCanvas'); if(!c)return;
+  const SPICE_PH_OLD='080-2211', SPICE_PH_NEW='080-9944';
+  const base=[
+    [101,'Ananya','Dosa Palace','080-5566','Masala Dosa',120],
+    [102,'Munna','Spice Villa',SPICE_PH_OLD,'Paneer Tikka',260],
+    [103,'Priya','Pizza Nation','020-7788','Veg Pizza',420],
+    [104,'Zoya','Spice Villa',SPICE_PH_OLD,'Dal Makhani',220],
+    [105,'Dev','Momo Junction','011-3344','Momo Platter',180],
+    [106,'Sneha','Spice Villa',SPICE_PH_OLD,'Butter Naan',60],
+    [107,'Arjun','Chaat Adda','011-9911','Pani Puri',90],
+    [108,'Kabir','Dosa Palace','080-5566','Idli Combo',110],
+    [109,'Meera','Spice Villa',SPICE_PH_OLD,'Veg Biryani',250],
+    [110,'Ishan','Burger Bhai','022-6600','Aloo Burger',150]
+  ];
+  const spiceRows=[1,3,5,8], missRow=8, chaatRow=6;
+  let mode='flat', edited=new Set(), missed=new Set(), deleted=new Set(), linkedPhoneNew=false, anim=null;
+  let restPhoneCell=null;
+  const cv=setupCanvas(c,function(ctx,W,H){
+    ctx.clearRect(0,0,W,H);
+    if(mode==='flat'){
+      const rows=base.map((r,i)=>{
+        const rr2=r.slice();
+        if(edited.has(i))rr2[3]=SPICE_PH_NEW;
+        return rr2;
+      });
+      drawTableC(ctx,{x:14,y:8,w:W-28,title:'orders_master.xlsx  (one big sheet)',
+        headers:['order_id','customer','restaurant','rest_phone','dish','price'],
+        colFr:[.12,.16,.22,.18,.2,.12],
+        rows,
+        rowH:(H-64)/rows.length,
+        rowStyle:i=>deleted.has(i)?{band:isLight?'rgba(20,40,80,.05)':'rgba(120,140,180,.10)',ink:isLight?'#5a6786':'#93a4c8'}:{},
+        cellStyle:(i,j)=>{
+          const isLight=document.documentElement.getAttribute('data-theme')==='light';
+          if(j===3&&edited.has(i))return{band:isLight?'rgba(12,115,41,.12)':'rgba(98,232,138,.18)',ink:isLight?'#0c7329':'#62e88a'};
+          if(j===3&&missed.has(i))return{band:isLight?'rgba(201,26,43,.14)':'rgba(255,107,129,.22)',ink:isLight?'#c91a2b':'#ff6b81',ring:isLight?'#c91a2b':'#ff6b81'};
+          if(j===3&&spiceRows.includes(i))return{band:isLight?'rgba(183,124,0,.08)':'rgba(255,203,107,.10)'};
+          return {};
+        }});
+    } else {
+      const isLight=document.documentElement.getAttribute('data-theme')==='light';
+      const oRows=base.map(r=>[r[0],r[1],r[2],r[4],r[5]]);
+      const t1=drawTableC(ctx,{x:14,y:8,w:W*0.55,title:'orders',
+        headers:['order_id','customer','restaurant','dish','price'],
+        colFr:[.16,.2,.26,.24,.14],
+        rows:oRows,rowH:(H-64)/oRows.length,
+        rowStyle:i=>deleted.has(i)?{band:isLight?'rgba(20,40,80,.05)':'rgba(120,140,180,.10)',ink:isLight?'#5a6786':'#93a4c8'}:{}});
+      const rRows=[['Dosa Palace','080-5566'],['Spice Villa',linkedPhoneNew?SPICE_PH_NEW:SPICE_PH_OLD],
+                   ['Pizza Nation','020-7788'],['Momo Junction','011-3344'],
+                   ['Chaat Adda','011-9911'],['Burger Bhai','022-6600']];
+      drawTableC(ctx,{x:W*0.55+34,y:8,w:W-(W*0.55+34)-14,title:'restaurants',
+        headers:['name','phone'],colFr:[.55,.45],
+        rows:rRows,rowH:(H-64)/rRows.length,
+        cellStyle:(i,j)=>{
+          const isLight=document.documentElement.getAttribute('data-theme')==='light';
+          if(i===1&&j===1&&linkedPhoneNew)return{band:isLight?'rgba(12,115,41,.12)':'rgba(98,232,138,.2)',ink:isLight?'#0c7329':'#62e88a',ring:isLight?'#0c7329':'#62e88a'};
+          if(i===4&&j===0&&deleted.has(chaatRow))return{band:isLight?'rgba(12,115,41,.10)':'rgba(98,232,138,.14)',ink:isLight?'#0c7329':'#62e88a'};
+          return {};
+        }});
+    }
+  });
+  const out=$('#flatOut');
+  function baseline(){
+    out.innerHTML=(mode==='flat')
+      ?'one big sheet: Spice Villa\'s phone is copied on <span class="hl">'+spiceRows.length+' of '+base.length+'</span> visible rows.\n(imagine 8,452 of 80,000 in the real file)\n→ press a button above'
+      :'linked tables: Spice Villa\'s phone lives in <span class="g">exactly 1 cell</span>, in restaurants.\norders rows carry no phone at all - they just name the restaurant.\n→ press a button above';
+  }
+  function setMode(m){
+    mode=m; edited.clear(); missed.clear(); deleted.clear(); linkedPhoneNew=false;
+    if(anim){clearInterval(anim);anim=null;}
+    $('#flatModeSheet').classList.toggle('active',m==='flat');
+    $('#flatModeLinked').classList.toggle('active',m==='linked');
+    baseline(); cv.redraw();
+  }
+  $('#flatModeSheet').addEventListener('click',()=>setMode('flat'));
+  $('#flatModeLinked').addEventListener('click',()=>setMode('linked'));
+  $('#flatReset').addEventListener('click',()=>setMode(mode));
+  $('#flatPhone').addEventListener('click',()=>{
+    if(anim)return;
+    if(mode==='flat'){
+      edited.clear();missed.clear();
+      const todo=spiceRows.filter(r=>r!==missRow);
+      let k=0;
+      out.innerHTML='find-and-replace running…';
+      anim=setInterval(()=>{
+        if(k<todo.length){edited.add(todo[k]);k++;cv.redraw();
+          out.innerHTML='editing phone cells… <span class="g">'+edited.size+' edited</span>';}
+        else{missed.add(missRow);cv.redraw();clearInterval(anim);anim=null;
+          out.innerHTML='edited <span class="g">3 cells</span>… and <span class="r">MISSED 1</span> (row 109 - typed differently).\n'+
+          'the sheet now holds <span class="r">two phone numbers</span> for one restaurant.\n'+
+          'which is true? nobody knows. this is an <span class="hl">update anomaly</span>.';}
+      },420);
+    } else {
+      linkedPhoneNew=true;cv.redraw();
+      out.innerHTML='updated <span class="g">1 cell</span> in restaurants.phone.\nevery order instantly "sees" the new number by pointing at this row.\nno sweep, no misses, no second truth.';
+    }
+  });
+  $('#flatDelete').addEventListener('click',()=>{
+    deleted.add(chaatRow);cv.redraw();
+    out.innerHTML=(mode==='flat')
+      ?'order 107 deleted. it was Chaat Adda\'s ONLY order -\nits name and phone lived only on that row.\n<span class="r">Chaat Adda has vanished from your data.</span> a <span class="hl">delete anomaly</span>.'
+      :'order 107 deleted. Chaat Adda still lives in restaurants\n(<span class="g">highlighted</span>) - the restaurant is a fact of its own table.\nno anomaly.';
+  });
+  baseline();
+});
+
+/* ============ 02 LIBRARIAN LAB ============ */
+window.__demos.push(function(){
+  const c=$('#libCanvas'); if(!c)return;
+  let mode='lib', stage=0, auto=null;
+  const stagesLib=[
+    'you have a question: "top rated restaurants in Pune?"',
+    'you write it as a SQL slip:\n  SELECT name FROM restaurants WHERE city = \'Pune\';',
+    'the DBMS (librarian) reads the slip and plans the fastest search.',
+    'the DBMS searches the shelves (tables) - not you.',
+    'a small result table comes back to your desk. round trip done.'
+  ];
+  const stagesDIY=[
+    'you have the same question - but there is no librarian.',
+    'you open the 80,000-row sheet yourself.',
+    'you scroll… filter… scroll… (you are the search engine now)',
+    'you copy-paste rows into another sheet, hoping you missed nothing.',
+    'you get an answer - slowly, and nobody guarded the data while you dug.'
+  ];
+  const cv=setupCanvas(c,function(ctx,W,H){
+    ctx.clearRect(0,0,W,H);
+    const boxes=(mode==='lib')
+      ?[['you','#19c4ff'],['SQL slip','#38f0d8'],['DBMS','#9b8cff'],['tables','#ffcb6b'],['result','#62e88a']]
+      :[['you','#19c4ff'],['the sheet','#ff6b81'],['scroll+filter','#ff6b81'],['copy-paste','#ff6b81'],['answer?','#ffcb6b']];
+    const n=boxes.length, slot=(W-40)/n;
+    const pos=[];
+    boxes.forEach((b,i)=>{
+      const bx=20+i*slot+slot*0.1, bw=slot*0.8, by=H*0.32, bh=52;
+      pos.push({x:bx+bw/2,y:by+bh/2,bx,by,bw,bh});
+      ctx.fillStyle=i<=stage?'#121d36':'#0b1120';
+      ctx.strokeStyle=i<=stage?b[1]:'rgba(120,150,210,.25)';
+      ctx.lineWidth=i===stage?2.6:1.4;
+      rr(ctx,bx,by,bw,bh,10,true,true);
+      ctx.fillStyle=i<=stage?'#e7edf9':'#4a5776';
+      ctx.font='700 12px monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(b[0],bx+bw/2,by+bh/2);
+      ctx.textBaseline='alphabetic';ctx.textAlign='left';
+    });
+    for(let i=0;i<n-1;i++){
+      const a=pos[i],b=pos[i+1];
+      ctx.strokeStyle=i<stage?'rgba(56,240,216,.8)':'rgba(120,150,210,.25)';
+      ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(a.bx+a.bw,a.y);ctx.lineTo(b.bx,b.y);ctx.stroke();
+      if(i<stage){
+        ctx.fillStyle='#38f0d8';
+        ctx.beginPath();ctx.arc((a.bx+a.bw+b.bx)/2,a.y,3.4,0,7);ctx.fill();
+      }
+    }
+    ctx.fillStyle='#64759c';ctx.font='11px monospace';ctx.textAlign='center';
+    ctx.fillText(mode==='lib'?'the librarian does the searching':'YOU do the searching',W/2,H-16);
+    ctx.textAlign='left';
+  });
+  const out=$('#libOut');
+  function show(){cv.redraw();
+    const s=(mode==='lib')?stagesLib:stagesDIY;
+    out.innerHTML='stage '+(stage+1)+'/5: '+(stage===4?'<span class="g">'+s[stage]+'</span>':s[stage]);}
+  function step(){stage=(stage+1)%5;show();}
+  function setMode(m){mode=m;stage=0;
+    $('#libModeLib').classList.toggle('active',m==='lib');
+    $('#libModeDIY').classList.toggle('active',m==='diy');show();}
+  $('#libModeLib').addEventListener('click',()=>setMode('lib'));
+  $('#libModeDIY').addEventListener('click',()=>setMode('diy'));
+  $('#libStep').addEventListener('click',step);
+  $('#libReset').addEventListener('click',()=>{stage=0;show();});
+  $('#libAuto').addEventListener('click',function(){
+    if(auto){clearInterval(auto);auto=null;this.classList.remove('active');this.innerHTML='auto &#9654;';return;}
+    this.classList.add('active');this.innerHTML='&#9208; stop';
+    auto=setInterval(()=>{if(stage===4){clearInterval(auto);auto=null;
+      const b=$('#libAuto');b.classList.remove('active');b.innerHTML='auto &#9654;';}else step();},900);
+  });
+  show();
+});
+
+/* ============ 03 ANATOMY LAB ============ */
+window.__demos.push(function(){
+  const c=$('#anaCanvas'); if(!c)return;
+  const tables={
+    orders:{title:'orders',headers:['order_id ★','customer','dish','price'],
+      colFr:[.22,.26,.32,.2],grain:'order',
+      rows:[[101,'Ananya','Masala Dosa',120],[102,'Munna','Veg Biryani',250],
+            [103,'Priya','Paneer Pizza',420],[104,'Zoya','Momo Platter',180]],
+      kinds:['id number (INTEGER)','name (TEXT)','dish name (TEXT)','price (INTEGER)']},
+    items:{title:'order_items',headers:['order_id →','dish_id →','quantity'],
+      colFr:[.36,.36,.28],grain:'line',
+      rows:[[101,7,1],[102,3,2],[102,9,1],[103,4,1]],
+      kinds:['points at an order','points at a dish','count (INTEGER)']}
+  };
+  let cur='orders', hover=null, lastRects=null, quizOn=false, qi=0, score=0;
+  const quiz=[
+    {q:'Click the CELL that stores what order 103 cost.',test:(r,col)=>r===2&&col===3},
+    {q:'Click any cell in the dish COLUMN.',test:(r,col)=>col===2},
+    {q:'Click any cell of order 102\'s ROW.',test:(r,col)=>r===1}
+  ];
+  const cv=setupCanvas(c,function(ctx,W,H){
+    ctx.clearRect(0,0,W,H);
+    const T=tables[cur];
+    const res=drawTableC(ctx,{x:20,y:12,w:W-40,title:T.title,headers:T.headers,
+      colFr:T.colFr,rows:T.rows,rowH:(H-90)/T.rows.length,
+      rowStyle:i=>hover&&hover.r===i?{band:'rgba(255,203,107,.10)'}:{},
+      cellStyle:(i,j)=>{
+        const o={};
+        if(hover&&hover.c===j)o.band='rgba(25,196,255,.08)';
+        if(hover&&hover.r===i&&hover.c===j){o.ring='#62e88a';o.band='rgba(98,232,138,.12)';}
+        return o;
+      }});
+    lastRects=res.rects;
+    ctx.fillStyle='#64759c';ctx.font='11px monospace';
+    ctx.fillText('★ primary key   → foreign key (pointer)',24,H-10);
+  });
+  const out=$('#anaOut');
+  function describe(){
+    const T=tables[cur];
+    if(!hover){out.innerHTML='hover a cell… (grain of '+T.title+': one row = '+
+      (T.grain==='order'?'one order':'one dish inside one order')+')';return;}
+    const {r,c:col}=hover;
+    out.innerHTML=
+      'CELL  = one fact: <span class="g">'+T.rows[r][col]+'</span>\n'+
+      'ROW   '+(r+1)+' = one complete record: <span class="hl">['+T.rows[r].join(', ')+']</span>\n'+
+      'COLUMN "'+T.headers[col]+'" = same kind of fact for every row - '+T.kinds[col];
+  }
+  function hit(ev){
+    const rect=c.getBoundingClientRect();
+    const sx=(ev.clientX-rect.left), sy=(ev.clientY-rect.top);
+    if(!lastRects)return null;
+    for(let i=0;i<lastRects.length;i++)
+      for(let j=0;j<lastRects[i].length;j++){
+        const q=lastRects[i][j];
+        if(sx>=q.x&&sx<=q.x+q.w&&sy>=q.y&&sy<=q.y+q.h)return{r:i,c:j};
+      }
+    return null;
+  }
+  c.addEventListener('mousemove',ev=>{const h=hit(ev);
+    if(JSON.stringify(h)!==JSON.stringify(hover)){hover=h;cv.redraw();if(!quizOn)describe();}});
+  c.addEventListener('click',ev=>{
+    if(!quizOn)return;
+    const h=hit(ev); if(!h)return;
+    const ok=quiz[qi].test(h.r,h.c);
+    if(ok)score++;
+    out.innerHTML=(ok?'<span class="g">correct!</span> ':'<span class="r">not quite.</span> ')+
+      'score '+score+'/'+(qi+1);
+    qi++;
+    if(qi>=quiz.length){quizOn=false;$('#anaQ').textContent='';
+      out.innerHTML+='\nquiz done: <span class="g">'+score+'/'+quiz.length+'</span>. hover freely again.';}
+    else $('#anaQ').textContent=quiz[qi].q;
+  });
+  $('#anaQuiz').addEventListener('click',()=>{
+    if(cur!=='orders'){cur='orders';syncTblBtns();cv.redraw();}
+    quizOn=true;qi=0;score=0;$('#anaQ').textContent=quiz[0].q;
+    out.innerHTML='quiz on - click the canvas.';
+  });
+  function syncTblBtns(){
+    $('#anaTblOrders').classList.toggle('active',cur==='orders');
+    $('#anaTblItems').classList.toggle('active',cur==='items');
+    $('#anaGrainChips').style.display=cur==='items'?'flex':'none';
+  }
+  $('#anaTblOrders').addEventListener('click',()=>{cur='orders';quizOn=false;$('#anaQ').textContent='';syncTblBtns();hover=null;cv.redraw();describe();});
+  $('#anaTblItems').addEventListener('click',()=>{cur='items';quizOn=false;$('#anaQ').textContent='';syncTblBtns();hover=null;cv.redraw();
+    out.innerHTML='same order 102 appears on TWO rows here. so what does one row mean?\nanswer with the buttons below.';});
+  $$('#anaGrainChips [data-grain]').forEach(b=>b.addEventListener('click',function(){
+    const ok=this.dataset.grain===tables[cur].grain;
+    out.innerHTML=ok
+      ?'<span class="g">yes!</span> one row = one dish inside one order. order 102 has two rows because it has two dishes.\ncounting "orders" by counting rows here would be WRONG - that\'s why grain comes first.'
+      :'<span class="r">look again:</span> order 102 appears twice. a row here is smaller than a whole order…';
+  }));
+  describe();
+});
+
+/* ============ 04 PK AUDIT LAB ============ */
+window.__demos.push(function(){
+  const c=$('#pkCanvas'); if(!c)return;
+  const base=[
+    [1,'Ananya Iyer','ananya@gmail.com','98450-11111'],
+    [2,'Munna Kumar','munna.kumar@gmail.com','98110-22222'],
+    [3,'Priya Patel','priya.p@yahoo.com','98200-33333'],
+    [4,'Munna Kumar','munna.kumar@gmail.com','98550-44444'],
+    [5,'Zoya Khan','','98110-22222'],
+    [6,'Dev Mehta','dev.m@gmail.com','98860-55555'],
+    [7,'Sneha Reddy','sneha.r@gmail.com','98110-22222'],
+    [8,'Arjun Nair','','99870-66666']
+  ];
+  const growth=[
+    [9,'Priya Patel','priya.p@yahoo.com','97000-77777'],
+    [10,'Kabir Das','','98110-22222'],
+    [11,'Meera Jain','meera@gmail.com','96500-88888']
+  ];
+  let rows=base.slice(), cand=0, grown=false;
+  const names=['customer_id','name','email','phone'];
+  function dupSets(col){
+    const seen={}, dup=new Set(), blank=new Set();
+    rows.forEach((r,i)=>{
+      const v=String(r[col]).trim().toLowerCase();
+      if(v===''){blank.add(i);return;}
+      if(v in seen){dup.add(i);dup.add(seen[v]);}
+      else seen[v]=i;
+    });
+    return {dup,blank};
+  }
+  const cv=setupCanvas(c,function(ctx,W,H){
+    ctx.clearRect(0,0,W,H);
+    const {dup,blank}=dupSets(cand);
+    drawTableC(ctx,{x:20,y:10,w:W-40,title:'customers  ('+rows.length+' rows)',
+      headers:names,colFr:[.16,.28,.34,.22],
+      rows:rows.map(r=>r.map((v,j)=>j===2&&v===''?'(blank)':v)),
+      rowH:(H-58)/rows.length,
+      cellStyle:(i,j)=>{
+        if(j!==cand)return{};
+        if(blank.has(i))return{band:'rgba(255,203,107,.18)',ink:'#ffcb6b'};
+        if(dup.has(i))return{band:'rgba(255,107,129,.18)',ink:'#ff6b81',ring:'#ff6b81'};
+        return{band:'rgba(98,232,138,.10)',ink:'#62e88a'};
+      }});
+  });
+  const out=$('#pkOut');
+  function verdict(){
+    const {dup,blank}=dupSets(cand);
+    const uniq=dup.size===0, present=blank.size===0;
+    const stable=[true,false,false,false][cand];
+    const stableWhy=['system-assigned, never edited','people change names (marriage, spelling)','people change emails; accounts get merged','numbers get recycled to strangers'][cand];
+    const v=(b)=>b?'<span class="g">yes</span>':'<span class="r">NO</span>';
+    out.innerHTML='auditing candidate: <span class="hl">'+names[cand]+'</span>\n'+
+      'unique for every row?   '+v(uniq)+(dup.size?'   ('+dup.size+' rows clash)':'')+'\n'+
+      'always present?         '+v(present)+(blank.size?'   ('+blank.size+' blank)':'')+'\n'+
+      'stable over time?       '+v(stable)+'   ('+stableWhy+')\n'+
+      (uniq&&present&&stable
+        ?'<span class="g">VERDICT: passes all three - fit to be PRIMARY KEY.</span>'
+        :'<span class="r">VERDICT: rejected.</span> one "no" is enough.');
+    cv.redraw();
+  }
+  $$('[data-cand]').forEach(b=>b.addEventListener('click',function(){
+    cand=+this.dataset.cand;
+    $$('[data-cand]').forEach(x=>x.classList.toggle('active',x===this));
+    verdict();
+  }));
+  $('#pkGrow').addEventListener('click',()=>{
+    if(grown)return; grown=true;
+    rows=rows.concat(growth);
+    verdict();
+    out.innerHTML+='\n<span class="hl">3 new signups arrived.</span> re-check each candidate - who cracked?';
+  });
+  $('#pkReset').addEventListener('click',()=>{rows=base.slice();grown=false;verdict();});
+  verdict();
+});
+
+/* ============ 05 FK LAB ============ */
+window.__demos.push(function(){
+  const c=$('#fkCanvas'); if(!c)return;
+  const custs=[[1,'Ananya Iyer','Bengaluru'],[2,'Munna Kumar','Delhi'],
+               [3,'Priya Patel','Mumbai'],[4,'Munna Kumar','Pune']];
+  const orders=[[101,2,540],[102,4,180],[103,2,820],[104,1,260]];
+  let sel=null, prog=0, anim=null, ghost=false, ghostProg=0, delFlash=false;
+  let cRects=null,oRects=null;
+  const cv=setupCanvas(c,function(ctx,W,H){
+    ctx.clearRect(0,0,W,H);
+    const rowH=(H-120)/4;
+    const t1=drawTableC(ctx,{x:16,y:14,w:W*0.42,title:'customers',
+      headers:['customer_id ★','name','city'],colFr:[.3,.42,.28],
+      rows:custs,rowH,
+      rowStyle:i=>{
+        if(delFlash&&custs[i][0]===2)return{band:'rgba(255,107,129,.22)'};
+        if(sel!==null&&custs[i][0]===orders[sel][1]&&prog>=1)return{band:'rgba(98,232,138,.16)'};
+        return{};
+      }});
+    const oX=W*0.58;
+    const t2=drawTableC(ctx,{x:oX,y:14,w:W-oX-16,title:'orders',
+      headers:['order_id ★','customer_id →','amount'],colFr:[.32,.38,.3],
+      rows:orders,rowH,
+      rowStyle:i=>{
+        if(sel===i)return{band:'rgba(255,203,107,.14)'};
+        if(delFlash&&orders[i][1]===2)return{band:'rgba(255,203,107,.20)'};
+        return{};
+      }});
+    cRects=t1.rects; oRects=t2.rects;
+    if(sel!==null){
+      const from=oRects[sel][1], toIdx=custs.findIndex(r=>r[0]===orders[sel][1]);
+      const to=cRects[toIdx][0];
+      arrowC(ctx,from.x+4,from.y+from.h/2,to.x+to.w-4,to.y+to.h/2,'#19c4ff',Math.min(1,prog));
+    }
+    if(ghost){
+      const gy=t2.bottom+14;
+      ctx.setLineDash([6,5]);
+      ctx.strokeStyle='#ff6b81';ctx.lineWidth=1.6;
+      ctx.strokeRect(oX,gy,W-oX-16,26);
+      ctx.setLineDash([]);
+      ctx.fillStyle='#ff6b81';ctx.font='12px monospace';ctx.textAlign='center';
+      ctx.fillText('105    999    310',oX+(W-oX-16)/2,gy+17);
+      ctx.textAlign='left';
+      const fx=oX+30, fy=gy+13;
+      const tx=W*0.42+16+((fx-(W*0.42+16))*(1-ghostProg)), ty=fy-40*Math.sin(Math.PI*ghostProg);
+      arrowC(ctx,fx,fy,16+W*0.42+8,fy-30,'#ff6b81',Math.min(1,ghostProg));
+      if(ghostProg>=1){
+        ctx.fillStyle='#ff6b81';ctx.font='700 22px monospace';
+        ctx.fillText('✕',16+W*0.42+2,fy-24);
+      }
+    }
+  });
+  const out=$('#fkOut');
+  function animateTo(cb){
+    if(anim)clearInterval(anim);
+    prog=0;
+    anim=setInterval(()=>{prog+=0.08;cv.redraw();
+      if(prog>=1){clearInterval(anim);anim=null;if(cb)cb();}},24);
+  }
+  c.addEventListener('click',ev=>{
+    const rect=c.getBoundingClientRect();
+    const sx=ev.clientX-rect.left, sy=ev.clientY-rect.top;
+    if(!oRects)return;
+    for(let i=0;i<oRects.length;i++){
+      const q=oRects[i][0], last=oRects[i][oRects[i].length-1];
+      if(sx>=q.x&&sx<=last.x+last.w&&sy>=q.y&&sy<=q.y+q.h){
+        sel=i;ghost=false;delFlash=false;
+        const cid=orders[i][1];
+        const cu=custs.find(r=>r[0]===cid);
+        animateTo(()=>{
+          out.innerHTML='order <span class="hl">'+orders[i][0]+'</span> stores customer_id = <span class="hl">'+cid+'</span>\n'+
+          'one hop → customers row '+cid+': <span class="g">'+cu[1]+', '+cu[2]+'</span>\n'+
+          'two Munna Kumars exist - the id never confuses them.';
+        });
+        return;
+      }
+    }
+  });
+  $('#fkInsert').addEventListener('click',()=>{
+    sel=null;delFlash=false;ghost=true;ghostProg=0;
+    if(anim)clearInterval(anim);
+    anim=setInterval(()=>{ghostProg+=0.06;cv.redraw();
+      if(ghostProg>=1){clearInterval(anim);anim=null;
+        out.innerHTML='INSERT INTO orders VALUES (105, <span class="r">999</span>, 310);\n'+
+        'DBMS checks: does customer 999 exist? <span class="r">no.</span>\n'+
+        '<span class="r">REJECTED - foreign key violation.</span> no orphan rows, ever. that\'s referential integrity.';}},24);
+  });
+  $('#fkDelete').addEventListener('click',()=>{
+    sel=null;ghost=false;delFlash=true;cv.redraw();
+    out.innerHTML='DELETE FROM customers WHERE customer_id = 2;\n'+
+      'DBMS checks: do orders still point at 2? <span class="hl">yes - orders 101 and 103.</span>\n'+
+      '<span class="r">REFUSED.</span> deleting the row would strand two pointers. the bodyguard protects both tables.';
+  });
+  $('#fkReset').addEventListener('click',()=>{sel=null;ghost=false;delFlash=false;
+    if(anim){clearInterval(anim);anim=null;}
+    out.innerHTML='click any order row to trace its pointer…';cv.redraw();});
+});
+
+/* ============ 06 RELATIONSHIP GAME ============ */
+window.__demos.push(function(){
+  const c=$('#relCanvas'); if(!c)return;
+  const rounds=[
+    {a:'customer',b:'order',ans:'1N',why:'one customer places many orders; an order has one customer.'},
+    {a:'order',b:'dish',ans:'NM',why:'an order holds many dishes; a dish appears in many orders. junction: order_items.'},
+    {a:'customer',b:'wallet',ans:'11',why:'one wallet each, and a wallet has one owner.'},
+    {a:'restaurant',b:'dish',ans:'1N',why:'a menu has many dishes; each dish row belongs to its restaurant.'},
+    {a:'student',b:'course',ans:'NM',why:'you take many courses; a course holds many students. junction: enrolments.'},
+    {a:'person',b:'Aadhaar number',ans:'11',why:'one number each, one person per number.'}
+  ];
+  let ri=0, answered=false, score=0, tries=0, shown=null;
+  const cv=setupCanvas(c,function(ctx,W,H){
+    ctx.clearRect(0,0,W,H);
+    const r=rounds[ri];
+    const leftN=(shown==='11')?1:(shown==='1N'?1:3);
+    const rightN=(shown===null)?3:(shown==='11'?1:3);
+    const Lx=W*0.26,Rx=W*0.74;
+    const ys=n=>n===1?[H*0.44]:[H*0.22,H*0.44,H*0.66];
+    if(shown){
+      const ly=ys(leftN), ryy=ys(rightN);
+      ctx.strokeStyle='rgba(147,164,200,.7)';ctx.lineWidth=1.6;
+      if(shown==='11'){line(Lx,ly[0],Rx,ryy[0]);}
+      else if(shown==='1N'){ryy.forEach(y=>line(Lx,ly[0],Rx,y));}
+      else{
+        [[0,0],[0,1],[1,0],[1,2],[2,2],[2,0]].forEach(p=>line(Lx,ly[p[0]],Rx,ryy[p[1]]));
+      }
+    }
+    function line(x0,y0,x1,y1){ctx.beginPath();ctx.moveTo(x0+14,y0);ctx.lineTo(x1-14,y1);ctx.stroke();}
+    const dotCol=['#ffcb6b','#62e88a'];
+    ys(leftN).forEach(y=>{ctx.fillStyle=dotCol[0];ctx.beginPath();ctx.arc(Lx,y,11,0,7);ctx.fill();});
+    ys(rightN).forEach(y=>{ctx.fillStyle=dotCol[1];ctx.beginPath();ctx.arc(Rx,y,11,0,7);ctx.fill();});
+    ctx.fillStyle='#93a4c8';ctx.font='700 13px monospace';ctx.textAlign='center';
+    ctx.fillText(r.a,Lx,H*0.86);
+    ctx.fillText(r.b,Rx,H*0.86);
+    if(!shown){ctx.fillStyle='#64759c';ctx.font='700 26px monospace';ctx.fillText('?',W/2,H*0.47);}
+    ctx.textAlign='left';
+  });
+  const out=$('#relOut');
+  function ask(){
+    answered=false;shown=null;
+    $('#relQ').textContent='round '+(ri+1)+'/6:  '+rounds[ri].a+'  ↔  '+rounds[ri].b;
+    out.innerHTML='ask both questions:\ncan one '+rounds[ri].a+' have many '+rounds[ri].b+'s?\ncan one '+rounds[ri].b+' have many '+rounds[ri].a+'s?';
+    cv.redraw();
+  }
+  $$('[data-rel]').forEach(b=>b.addEventListener('click',function(){
+    if(answered)return;
+    answered=true;tries++;
+    const r=rounds[ri], ok=this.dataset.rel===r.ans;
+    if(ok)score++;
+    shown=r.ans;cv.redraw();
+    const label={'11':'1:1','1N':'1:N','NM':'N:M'}[r.ans];
+    out.innerHTML=(ok?'<span class="g">correct - '+label+'.</span> ':'<span class="r">it\'s '+label+'.</span> ')+r.why+
+      (r.ans==='NM'?'\n<span class="hl">N:M ⇒ junction table.</span>':'\n<span class="hl">FK sits on the many side.</span>');
+    $('#relScore').textContent='score '+score+'/'+tries;
+  }));
+  $('#relNext').addEventListener('click',()=>{ri=(ri+1)%rounds.length;ask();});
+  ask();
+});
+
+/* ============ 07 SCHEMA BUILDER ============ */
+window.__demos.push(function(){
+  const c=$('#schCanvas'); if(!c)return;
+  const boxes={
+    customers:{x:.03,y:.10,w:.21,col:'#19c4ff',f:['customer_id ★','name','city','phone']},
+    restaurants:{x:.76,y:.10,w:.21,col:'#62e88a',f:['restaurant_id ★','name','city','cuisine','rating']},
+    orders:{x:.395,y:.06,w:.22,col:'#ffcb6b',f:['order_id ★','customer_id →','restaurant_id →','order_date','amount']},
+    dishes:{x:.76,y:.60,w:.21,col:'#9b8cff',f:['dish_id ★','restaurant_id →','name','price','is_veg']},
+    order_items:{x:.395,y:.64,w:.22,col:'#ff6b81',f:['order_id →','dish_id →','quantity']}
+  };
+  const moves=[
+    {show:[],desc:'move 1 - list the nouns: customers, restaurants, dishes, orders.\neach noun the business talks about becomes a table.'},
+    {show:['customers'],desc:'move 2+3 - customers table: grain "one row = one customer",\nsurrogate key customer_id ★. facts that are true once per customer live here.'},
+    {show:['customers','restaurants'],desc:'restaurants: grain "one row = one restaurant". name, city, cuisine, rating -\neach written ONCE. the phone-change disaster dies here.'},
+    {show:['customers','restaurants','dishes'],desc:'dishes: one row = one menu item. relationship restaurant↔dish is 1:N,\nso dishes carries restaurant_id → (FK on the many side).'},
+    {show:['customers','restaurants','dishes','orders'],desc:'orders: one row = one placed order. two 1:N relationships land here:\ncustomer_id → and restaurant_id →. plus order-level facts: date, amount.'},
+    {show:['customers','restaurants','dishes','orders','order_items'],desc:'order↔dish is N:M (yes-yes) - neither table can hold the pointer.\njunction order_items: one row per (order, dish) pair + quantity.'},
+    {show:['customers','restaurants','dishes','orders','order_items'],final:true,desc:'move 6 - hunt repetition: customer city once per customer, dish price once\nper dish, restaurant phone ONCE. <BADGE>every fact stored exactly once ✓</BADGE>'}
+  ];
+  const links=[
+    ['orders','customers'],['orders','restaurants'],
+    ['dishes','restaurants'],['order_items','orders'],['order_items','dishes']
+  ];
+  let step=0, horror=false, auto=null;
+  const cv=setupCanvas(c,function(ctx,W,H){
+    ctx.clearRect(0,0,W,H);
+    if(horror){
+      ctx.strokeStyle='#ff6b81';ctx.lineWidth=2;
+      ctx.fillStyle='rgba(255,107,129,.05)';
+      rr(ctx,W*0.06,H*0.14,W*0.88,H*0.62,12,true,true);
+      ctx.fillStyle='#ff6b81';ctx.font='700 14px monospace';ctx.textAlign='center';
+      ctx.fillText('orders_master.xlsx - 21 columns, one grain soup',W/2,H*0.10);
+      const cols=['order_id','cust_name','cust_phone','cust_city','rest_name','rest_phone','rest_city','rest_cuisine','rest_rating','dish1_name','dish1_price','dish2_name','dish2_price','dish3_name','dish3_price','qty1','qty2','qty3','date','amount','notes'];
+      const repeated=new Set(['cust_name','cust_phone','cust_city','rest_name','rest_phone','rest_city','rest_cuisine','rest_rating','dish1_name','dish1_price','dish2_name','dish2_price','dish3_name','dish3_price']);
+      ctx.font='11.5px monospace';
+      const perRow=3, cw=W*0.88/perRow;
+      cols.forEach((col,i)=>{
+        const cx=W*0.06+ (i%perRow)*cw + cw/2;
+        const cy2=H*0.20 + Math.floor(i/perRow)*(H*0.52/Math.ceil(cols.length/perRow));
+        ctx.fillStyle=repeated.has(col)?'#ff6b81':'#93a4c8';
+        ctx.fillText(col+(repeated.has(col)?'  (repeats per order!)':''),cx,cy2);
+      });
+      ctx.fillStyle='#ffcb6b';ctx.font='700 12px monospace';
+      ctx.fillText('14 of 21 columns copy facts that belong to other grains - and dishes cap at 3',W/2,H*0.84);
+      ctx.textAlign='left';
+      return;
+    }
+    const m=moves[step];
+    const pos={};
+    Object.keys(boxes).forEach(k=>{
+      const b=boxes[k];
+      const rowH=20, headH=24;
+      const bw=b.w*W, bx=b.x*W, by=b.y*H;
+      const bh=headH+b.f.length*rowH+8;
+      pos[k]={cx:bx+bw/2,cy:by+bh/2,x:bx,y:by,w:bw,h:bh};
+      if(!m.show.includes(k)){
+        if(step===0){
+          ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(120,150,210,.35)';ctx.lineWidth=1.5;
+          ctx.fillStyle='rgba(255,255,255,0.02)';
+          rr(ctx,bx,by,bw,bh,8,true,true);
+          ctx.setLineDash([]);
+          ctx.fillStyle='#64759c';ctx.font='700 12px monospace';ctx.textAlign='center';
+          ctx.fillText(k+'?',bx+bw/2,by+bh/2+4);ctx.textAlign='left';
+        }
+        return;
+      }
+      ctx.fillStyle='#0e1729';ctx.strokeStyle=b.col;ctx.lineWidth=1.8;
+      rr(ctx,bx,by,bw,bh,8,true,true);
+      ctx.fillStyle=b.col;
+      rr(ctx,bx,by,bw,headH,8,true,false);
+      ctx.fillStyle='#06121f';ctx.font='700 12px monospace';ctx.textAlign='center';
+      ctx.fillText(k,bx+bw/2,by+16);
+      ctx.textAlign='left';ctx.font='11px monospace';
+      b.f.forEach((f,i)=>{
+        ctx.fillStyle=f.includes('★')?'#ffcb6b':(f.includes('→')?'#19c4ff':'#c9d6f2');
+        ctx.fillText(f,bx+8,by+headH+16+i*20);
+      });
+    });
+    links.forEach(l=>{
+      if(!m.show.includes(l[0])||!m.show.includes(l[1]))return;
+      const a=pos[l[0]],b2=pos[l[1]];
+      const x0=a.cx<b2.cx?a.x+a.w:a.x, x1=a.cx<b2.cx?b2.x:b2.x+b2.w;
+      ctx.strokeStyle='rgba(56,240,216,.85)';ctx.lineWidth=2.2;
+      ctx.beginPath();ctx.moveTo(x0,a.cy);
+      ctx.bezierCurveTo((x0+x1)/2,a.cy,(x0+x1)/2,b2.cy,x1,b2.cy);ctx.stroke();
+      ctx.fillStyle='#38f0d8';
+      ctx.beginPath();ctx.arc(x1,b2.cy,4.2,0,7);ctx.fill();
+    });
+    if(m.final){
+      ctx.fillStyle='#62e88a';ctx.font='700 14px monospace';ctx.textAlign='center';
+      ctx.fillText('✓ every fact stored exactly once',W/2,H*0.55);
+      ctx.textAlign='left';
+    }
+  });
+  const out=$('#schOut');
+  function show(){
+    horror=false;$('#schHorror').classList.remove('active');
+    cv.redraw();
+    out.innerHTML='step '+(step+1)+'/'+moves.length+':\n'+moves[step].desc
+      .replace('<BADGE>','<span class="g">').replace('</BADGE>','</span>');
+  }
+  $('#schStep').addEventListener('click',()=>{if(step<moves.length-1){step++;show();}});
+  $('#schBack').addEventListener('click',()=>{if(step>0){step--;show();}});
+  $('#schReset').addEventListener('click',()=>{step=0;show();});
+  $('#schAuto').addEventListener('click',function(){
+    if(auto){clearInterval(auto);auto=null;this.classList.remove('active');this.innerHTML='auto &#9654;';return;}
+    this.classList.add('active');this.innerHTML='&#9208; stop';
+    auto=setInterval(()=>{if(step>=moves.length-1){clearInterval(auto);auto=null;
+      const b=$('#schAuto');b.classList.remove('active');b.innerHTML='auto &#9654;';}
+      else{step++;show();}},2300);
+  });
+  $('#schHorror').addEventListener('click',function(){
+    horror=!horror;this.classList.toggle('active',horror);
+    cv.redraw();
+    if(horror)out.innerHTML='the same business as ONE table. red columns repeat facts on every\norder row - and dish columns cap every order at 3 dishes forever.\npress any step button to return to the sane blueprint.';
+    else show();
+  });
+  show();
+});
+
+/* ============ 08 FACT-HOME QUIZ ============ */
+window.__demos.push(function(){
+  const q=$('#homeQ'); if(!q)return;
+  const facts=[
+    {f:"the customer's phone number",t:'customers'},
+    {f:'the price of a dish',t:'dishes'},
+    {f:'how many plates of a dish one order had',t:'order_items'},
+    {f:"a restaurant's rating",t:'restaurants'},
+    {f:'the date an order was placed',t:'orders'},
+    {f:"the customer's city",t:'customers'}
+  ];
+  let fi=0, score=0, tries=0, done=false;
+  const out=$('#homeOut');
+  function ask(){
+    if(fi>=facts.length){
+      done=true;
+      q.textContent='done!';
+      out.innerHTML='final score <span class="g">'+score+'/'+facts.length+'</span>'+
+        (score===facts.length?' - perfect. you think in schemas now.':' - review the misses above, then try Friday\'s class.');
+      return;
+    }
+    q.textContent='where does this fact live once?  “'+facts[fi].f+'”';
+  }
+  $$('#homeChips [data-home]').forEach(b=>b.addEventListener('click',function(){
+    if(done||fi>=facts.length)return;
+    tries++;
+    const ok=this.dataset.home===facts[fi].t;
+    if(ok)score++;
+    out.innerHTML=(ok?'<span class="g">yes - '+facts[fi].t+'.</span>':'<span class="r">no - it lives in '+facts[fi].t+'.</span>')+
+      ' ('+score+'/'+tries+')';
+    $('#homeScore').textContent='score '+score+'/'+tries;
+    fi++; ask();
+  }));
+  ask();
+});
+
+/* copy button */
+window.__demos.push(function(){
+  const b=$('#copyQ'); if(!b)return;
+  b.addEventListener('click',()=>{
+    const txt="SELECT name, rating FROM restaurants WHERE city = 'Bengaluru';";
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(()=>{b.textContent='copied!';setTimeout(()=>b.textContent='copy',1400);});
+    }
+  });
+});
+
+
+window.__demos.push(function(){
+  // --- Progress Tracker Logic ---
+  const completedLabs = new Set();
+  const totalLabs = 8;
+  window.markLabDone = function(index) {
+    if (completedLabs.has(index)) return;
+    completedLabs.add(index);
+    const el = document.getElementById('prog-' + index);
+    if (el) el.classList.add('done');
+    updateProgressPercent();
+  };
+  function updateProgressPercent() {
+    const pct = Math.round((completedLabs.size / totalLabs) * 100);
+    const percentEl = document.getElementById('progPercent');
+    const fillEl = document.getElementById('progBarFill');
+    if (percentEl) percentEl.textContent = pct + '%';
+    if (fillEl) fillEl.style.width = pct + '%';
+  }
+
+  // --- Hooking up progress triggers to existing labs ---
+  // Lab 0: Spreadsheet Lab
+  const flatPhone = document.getElementById('flatPhone');
+  if (flatPhone) flatPhone.addEventListener('click', () => markLabDone(0));
+  const flatDelete = document.getElementById('flatDelete');
+  if (flatDelete) flatDelete.addEventListener('click', () => markLabDone(0));
+
+  // Lab 1: Librarian Lab
+  const libStep = document.getElementById('libStep');
+  if (libStep) libStep.addEventListener('click', () => markLabDone(1));
+  const libAuto = document.getElementById('libAuto');
+  if (libAuto) libAuto.addEventListener('click', () => markLabDone(1));
+
+  // Lab 2: Grain Quiz
+  const anaQuiz = document.getElementById('anaQuiz');
+  if (anaQuiz) anaQuiz.addEventListener('click', () => markLabDone(2));
+  document.querySelectorAll('#anaGrainChips button').forEach(btn => {
+    btn.addEventListener('click', () => markLabDone(2));
+  });
+
+  // Lab 3: PK Audit Lab
+  const pkGrow = document.getElementById('pkGrow');
+  if (pkGrow) pkGrow.addEventListener('click', () => markLabDone(3));
+  document.querySelectorAll('[data-cand]').forEach(btn => {
+    btn.addEventListener('click', () => markLabDone(3));
+  });
+
+  // Lab 4: FK Integrity Lab
+  const fkInsert = document.getElementById('fkInsert');
+  if (fkInsert) fkInsert.addEventListener('click', () => markLabDone(4));
+  const fkDelete = document.getElementById('fkDelete');
+  if (fkDelete) fkDelete.addEventListener('click', () => markLabDone(4));
+  const fkCanvas = document.getElementById('fkCanvas');
+  if (fkCanvas) fkCanvas.addEventListener('click', () => markLabDone(4));
+
+  // Lab 5: JOIN Simulator Canvas (handled separately inside join canvas logic)
+
+  // Lab 6: Relationship Game
+  document.querySelectorAll('[data-rel]').forEach(btn => {
+    btn.addEventListener('click', () => markLabDone(6));
+  });
+
+  // Lab 7: Final Boss Quiz (Fact-Home Quiz)
+  document.querySelectorAll('#homeChips [data-home]').forEach(btn => {
+    btn.addEventListener('click', () => markLabDone(7));
+  });
+
+
+  // --- SQL Cheat Drawer Toggling ---
+  const cheatDrawer = document.getElementById('cheatDrawer');
+  const cheatBtn = document.getElementById('cheatBtn');
+  const cheatCloseBtn = document.getElementById('cheatCloseBtn');
+  if (cheatBtn && cheatDrawer && cheatCloseBtn) {
+    cheatBtn.addEventListener('click', () => cheatDrawer.classList.add('open'));
+    cheatCloseBtn.addEventListener('click', () => cheatDrawer.classList.remove('open'));
+  }
+
+
+  // --- JOIN Simulator Canvas Implementation ---
+  const jCanvas = document.getElementById('joinCanvas');
+  if (jCanvas) {
+    const jCtx = jCanvas.getContext('2d');
+    let joined = false;
+    let animProg = 0;
+    let animInterval = null;
+    let joinType = 'INNER';
+
+    const orders = [
+      [101, 2, 540],
+      [102, 4, 180],
+      [103, 2, 820],
+      [104, 1, 260],
+      [105, 999, 450]
+    ];
+    const customers = [
+      [1, 'Ananya Iyer'],
+      [2, 'Munna Kumar'],
+      [3, 'Priya Patel'],
+      [4, 'Munna Kumar']
+    ];
+
+    const jCv = setupCanvas(jCanvas, function(ctx, W, H){
+      ctx.clearRect(0, 0, W, H);
+      if (!joined) {
+        // Draw orders table
+        drawTableC(ctx, {
+          x: 10, y: 15, w: W * 0.44, title: 'orders',
+          headers: ['order_id', 'cust_id →', 'amount'],
+          colFr: [0.3, 0.4, 0.3],
+          rows: orders,
+          rowH: 20
+        });
+
+        // Draw customers table
+        drawTableC(ctx, {
+          x: W * 0.56, y: 15, w: W * 0.42, title: 'customers',
+          headers: ['cust_id ★', 'name'],
+          colFr: [0.35, 0.65],
+          rows: customers,
+          rowH: 20
+        });
+
+        // Draw connecting key matching lines
+        ctx.strokeStyle = 'rgba(25,196,255,0.3)';
+        ctx.setLineDash([4, 4]);
+        ctx.lineWidth = 1.5;
+        orders.forEach((ord, idx) => {
+          const cid = ord[1];
+          const custIdx = customers.findIndex(cu => cu[0] === cid);
+          if (custIdx !== -1) {
+            const y1 = 15 + 24 + 10 + idx * 20 + 10;
+            const y2 = 15 + 24 + 10 + custIdx * 20 + 10;
+            ctx.beginPath();
+            ctx.moveTo(10 + W * 0.44 * 0.7, y1);
+            ctx.lineTo(W * 0.56 + W * 0.42 * 0.17, y2);
+            ctx.stroke();
+          }
+        });
+        ctx.setLineDash([]);
+      } else {
+        // Calculate joined rows based on type
+        let joinedRows = [];
+        if (joinType === 'INNER') {
+          orders.forEach(ord => {
+            const cust = customers.find(cu => cu[0] === ord[1]);
+            if (cust) {
+              joinedRows.push([ord[0], ord[1], ord[2], cust[1]]);
+            }
+          });
+        } else if (joinType === 'LEFT') {
+          orders.forEach(ord => {
+            const cust = customers.find(cu => cu[0] === ord[1]);
+            joinedRows.push([ord[0], ord[1], ord[2], cust ? cust[1] : 'NULL']);
+          });
+        } else if (joinType === 'RIGHT') {
+          customers.forEach(cust => {
+            const matchedOrders = orders.filter(ord => ord[1] === cust[0]);
+            if (matchedOrders.length > 0) {
+              matchedOrders.forEach(ord => {
+                joinedRows.push([ord[0], ord[1], ord[2], cust[1]]);
+              });
+            } else {
+              joinedRows.push(['NULL', 'NULL', 'NULL', cust[1]]);
+            }
+          });
+        }
+
+        const yOffset = 15 + (1 - animProg) * 40;
+        ctx.globalAlpha = animProg;
+        drawTableC(ctx, {
+          x: 10, y: yOffset, w: W - 20, title: `Result: orders ${joinType} JOIN customers`,
+          headers: ['order_id', 'customer_id', 'amount', 'customer.name'],
+          colFr: [0.2, 0.25, 0.2, 0.35],
+          rows: joinedRows,
+          rowH: 22,
+          cellStyle: (i, j) => {
+            const val = String(joinedRows[i][j]);
+            const isL = document.documentElement.getAttribute('data-theme')==='light';
+            if (val === 'NULL') {
+              return { band: isL ? 'rgba(201,26,43,.08)' : 'rgba(255,107,129,0.18)', ink: isL ? '#c91a2b' : '#ff6b81', ring: isL ? '#c91a2b' : '#ff6b81' };
+            }
+            if (j === 1 || j === 3) {
+              return { band: isL ? 'rgba(12,115,41,.06)' : 'rgba(98,232,138,0.12)', ring: isL ? 'rgba(12,115,41,.25)' : 'rgba(98,232,138,0.3)' };
+            }
+            return {};
+          }
+        });
+        ctx.globalAlpha = 1.0;
+      }
+    });
+
+    const updateVenn = () => {
+      const leftCircle = document.getElementById('vennLeftCircle');
+      const rightCircle = document.getElementById('vennRightCircle');
+      const intersect = document.getElementById('vennIntersect');
+      if (leftCircle && rightCircle && intersect) {
+        if (joinType === 'INNER') {
+          leftCircle.setAttribute('fill-opacity', '0.05');
+          rightCircle.setAttribute('fill-opacity', '0.05');
+          intersect.setAttribute('fill-opacity', '0.85');
+        } else if (joinType === 'LEFT') {
+          leftCircle.setAttribute('fill-opacity', '0.75');
+          rightCircle.setAttribute('fill-opacity', '0.05');
+          intersect.setAttribute('fill-opacity', '0.75');
+        } else if (joinType === 'RIGHT') {
+          leftCircle.setAttribute('fill-opacity', '0.05');
+          rightCircle.setAttribute('fill-opacity', '0.75');
+          intersect.setAttribute('fill-opacity', '0.75');
+        }
+      }
+    };
+
+    ['Inner', 'Left', 'Right'].forEach(type => {
+      const btn = document.getElementById(`joinType${type}`);
+      if (btn) {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('[id^="joinType"]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          joinType = type.toUpperCase();
+          joined = false;
+          updateVenn();
+          jCv.redraw();
+          const jOut = document.getElementById('joinOut');
+          if (jOut) {
+            jOut.innerHTML = `SELECT * FROM orders ${joinType} JOIN customers ON orders.customer_id = customers.customer_id;`;
+          }
+        });
+      }
+    });
+
+    const jBtn = document.getElementById('joinBtn');
+    if (jBtn) {
+      jBtn.addEventListener('click', () => {
+        joined = true;
+        markLabDone(5);
+        if (animInterval) clearInterval(animInterval);
+        animProg = 0;
+        animInterval = setInterval(() => {
+          animProg += 0.08;
+          if (animProg >= 1) {
+            animProg = 1;
+            clearInterval(animInterval);
+          }
+          jCv.redraw();
+        }, 25);
+        const jOut = document.getElementById('joinOut');
+        if (jOut) jOut.innerHTML = `<span class="g">✓ ${joinType} JOIN executed!</span> Combined result tables matching customer IDs successfully.`;
+      });
+    }
+
+    const jReset = document.getElementById('joinReset');
+    if (jReset) {
+      jReset.addEventListener('click', () => {
+        joined = false;
+        jCv.redraw();
+        const jOut = document.getElementById('joinOut');
+        if (jOut) jOut.innerHTML = `SELECT * FROM orders ${joinType} JOIN customers ON orders.customer_id = customers.customer_id;`;
+      });
+    }
+  }
+
+
+  // --- SQL Playground Database and Engine ---
+  const mockDb = {
+    customers: {
+      headers: ['customer_id', 'name', 'city', 'phone'],
+      rows: [
+        [1, 'Ananya Iyer', 'Bengaluru', '98450-11111'],
+        [2, 'Munna Kumar', 'Delhi', '98110-22222'],
+        [3, 'Priya Patel', 'Mumbai', '98200-33333'],
+        [4, 'Munna Kumar', 'Pune', '98550-44444']
+      ]
+    },
+    restaurants: {
+      headers: ['restaurant_id', 'name', 'city', 'cuisine', 'rating'],
+      rows: [
+        [1, 'Spice Villa', 'Delhi', 'North Indian', 4.5],
+        [2, 'Dosa Palace', 'Bengaluru', 'South Indian', 4.2],
+        [3, 'Pizza Nation', 'Mumbai', 'Italian', 4.7],
+        [4, 'Momo Junction', 'Delhi', 'Tibetan', 4.0]
+      ]
+    },
+    orders: {
+      headers: ['order_id', 'customer_id', 'amount'],
+      rows: [
+        [101, 2, 540],
+        [102, 4, 180],
+        [103, 2, 820],
+        [104, 1, 260]
+      ]
+    }
+  };
+
+  function executeMockSQL(sql) {
+    const cleanSql = sql.trim().replace(/;$/, '');
+    
+    // Check for INSERT
+    const insertRegex = /INSERT\s+INTO\s+(\w+)\s+VALUES\s*\((.+)\)/i;
+    const insertMatch = cleanSql.match(insertRegex);
+    if (insertMatch) {
+      const tableName = insertMatch[1].trim().toLowerCase();
+      const valsStr = insertMatch[2].trim();
+      const table = mockDb[tableName];
+      if (!table) return { error: `Table '${tableName}' not found.` };
+      
+      const vals = valsStr.split(',').map(v => {
+        let clean = v.trim();
+        if ((clean.startsWith("'") && clean.endsWith("'")) || (clean.startsWith('"') && clean.endsWith('"'))) {
+          return clean.slice(1, -1);
+        }
+        const num = parseFloat(clean);
+        return isNaN(num) ? clean : num;
+      });
+      
+      if (vals.length !== table.headers.length) {
+        return { error: `Column count mismatch. Table has ${table.headers.length} columns, but you provided ${vals.length} values.` };
+      }
+      
+      table.rows.push(vals);
+      if (tableName === 'orders' && typeof jCv !== 'undefined') jCv.redraw();
+      
+      return { 
+        headers: table.headers, 
+        rows: [vals], 
+        message: `SUCCESS: 1 row inserted into '${tableName}'.` 
+      };
+    }
+    
+    // Check for UPDATE
+    const updateRegex = /UPDATE\s+(\w+)\s+SET\s+(\w+)\s*=\s*(['"]?)(.*?)\3\s+WHERE\s+(\w+)\s*=\s*(['"]?)(.*?)\6/i;
+    const updateMatch = cleanSql.match(updateRegex);
+    if (updateMatch) {
+      const tableName = updateMatch[1].trim().toLowerCase();
+      const targetCol = updateMatch[2].trim().toLowerCase();
+      const targetVal = updateMatch[4];
+      const whereCol = updateMatch[5].trim().toLowerCase();
+      const whereVal = updateMatch[7];
+      
+      const table = mockDb[tableName];
+      if (!table) return { error: `Table '${tableName}' not found.` };
+      
+      const targetIdx = table.headers.findIndex(h => h.toLowerCase() === targetCol);
+      const whereIdx = table.headers.findIndex(h => h.toLowerCase() === whereCol);
+      if (targetIdx === -1) return { error: `Column '${targetCol}' not found.` };
+      if (whereIdx === -1) return { error: `Column '${whereCol}' not found.` };
+      
+      let count = 0;
+      table.rows.forEach(r => {
+        if (String(r[whereIdx]).toLowerCase() === String(whereVal).toLowerCase()) {
+          const num = parseFloat(targetVal);
+          r[targetIdx] = isNaN(num) ? targetVal : num;
+          count++;
+        }
+      });
+      
+      return { 
+        headers: table.headers, 
+        rows: table.rows, 
+        message: `SUCCESS: ${count} row(s) updated in '${tableName}'.` 
+      };
+    }
+    
+    // Check for DELETE
+    const deleteRegex = /DELETE\s+FROM\s+(\w+)\s+WHERE\s+(\w+)\s*=\s*(['"]?)(.*?)\3/i;
+    const deleteMatch = cleanSql.match(deleteRegex);
+    if (deleteMatch) {
+      const tableName = deleteMatch[1].trim().toLowerCase();
+      const whereCol = deleteMatch[2].trim().toLowerCase();
+      const whereVal = deleteMatch[4];
+      
+      const table = mockDb[tableName];
+      if (!table) return { error: `Table '${tableName}' not found.` };
+      
+      const whereIdx = table.headers.findIndex(h => h.toLowerCase() === whereCol);
+      if (whereIdx === -1) return { error: `Column '${whereCol}' not found.` };
+      
+      const initialCount = table.rows.length;
+      table.rows = table.rows.filter(r => String(r[whereIdx]).toLowerCase() !== String(whereVal).toLowerCase());
+      const count = initialCount - table.rows.length;
+      
+      return { 
+        headers: table.headers, 
+        rows: table.rows, 
+        message: `SUCCESS: ${count} row(s) deleted from '${tableName}'.` 
+      };
+    }
+    
+    const selectRegex = /SELECT\s+(.+?)\s+FROM\s+(\w+)(?:\s+WHERE\s+(.+))?/i;
+    const match = cleanSql.match(selectRegex);
+    
+    if (!match) {
+      return { error: 'Syntax Error: Only SELECT, INSERT, UPDATE, and DELETE queries are supported.' };
+    }
+    
+    const projectionStr = match[1].trim();
+    const tableName = match[2].trim().toLowerCase();
+    const whereClause = match[3] ? match[3].trim() : null;
+    
+    const table = mockDb[tableName];
+    if (!table) {
+      return { error: `Table '${tableName}' not found. Try customers, restaurants, or orders.` };
+    }
+    
+    let filteredRows = [...table.rows];
+    if (whereClause) {
+      const eqMatch = whereClause.match(/(\w+)\s*=\s*(['"]?)(.*?)\2/i);
+      const gtMatch = whereClause.match(/(\w+)\s*>\s*(\d+)/i);
+      
+      if (eqMatch) {
+        const colName = eqMatch[1].toLowerCase();
+        const val = eqMatch[3];
+        const colIdx = table.headers.findIndex(h => h.toLowerCase() === colName);
+        if (colIdx === -1) return { error: `Column '${colName}' not found.` };
+        filteredRows = filteredRows.filter(r => String(r[colIdx]).toLowerCase() === val.toLowerCase());
+      } else if (gtMatch) {
+        const colName = gtMatch[1].toLowerCase();
+        const val = parseFloat(gtMatch[2]);
+        const colIdx = table.headers.findIndex(h => h.toLowerCase() === colName);
+        if (colIdx === -1) return { error: `Column '${colName}' not found.` };
+        filteredRows = filteredRows.filter(r => parseFloat(r[colIdx]) > val);
+      } else {
+        return { error: 'Unsupported WHERE clause. Use e.g. city = \'Delhi\' or amount > 500' };
+      }
+    }
+    
+    let finalHeaders = [];
+    let colIndices = [];
+    if (projectionStr === '*') {
+      finalHeaders = [...table.headers];
+      colIndices = table.headers.map((_, i) => i);
+    } else {
+      const cols = projectionStr.split(',').map(c => c.trim().toLowerCase());
+      for (let c of cols) {
+        const idx = table.headers.findIndex(h => h.toLowerCase() === c);
+        if (idx === -1) return { error: `Column '${c}' not found in table '${tableName}'.` };
+        finalHeaders.push(table.headers[idx]);
+        colIndices.push(idx);
+      }
+    }
+    
+    const finalRows = filteredRows.map(row => colIndices.map(idx => row[idx]));
+    return { headers: finalHeaders, rows: finalRows };
+  }
+
+  function renderSQLResults(result) {
+    const tableEl = document.getElementById('sqlPlaygroundResults');
+    const outEl = document.getElementById('playgroundOut');
+    if (!tableEl || !outEl) return;
+    
+    tableEl.innerHTML = '';
+    if (result.error) {
+      outEl.innerHTML = `<span class="r">${result.error}</span>`;
+      return;
+    }
+    
+    let headHtml = '<tr>';
+    result.headers.forEach(h => {
+      headHtml += `<th>${h}</th>`;
+    });
+    headHtml += '</tr>';
+    
+    let rowHtml = '';
+    result.rows.forEach(r => {
+      rowHtml += '<tr>';
+      r.forEach(v => {
+        rowHtml += `<td>${v}</td>`;
+      });
+      rowHtml += '</tr>';
+    });
+    
+    tableEl.innerHTML = headHtml + rowHtml;
+    
+    if (result.message) {
+      outEl.innerHTML = `<span class="g">${result.message}</span> (Returned ${result.rows.length} row(s)).`;
+    } else {
+      outEl.innerHTML = `<span class="g">Query executed successfully! Returned ${result.rows.length} row(s).</span>`;
+    }
+  }
+
+  const queryInput = document.getElementById('sqlQueryInput');
+  if (queryInput) {
+    queryInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const query = queryInput.value;
+        const res = executeMockSQL(query);
+        renderSQLResults(res);
+      }
+    });
+  }
+
+  window.runPreset = function(query) {
+    if (queryInput) {
+      queryInput.value = query;
+      const res = executeMockSQL(query);
+      renderSQLResults(res);
+    }
+  };
+
+  const presetQuery1 = document.getElementById('presetQuery1');
+  if (presetQuery1) presetQuery1.addEventListener('click', () => runPreset('SELECT * FROM restaurants;'));
+  const presetQuery2 = document.getElementById('presetQuery2');
+  if (presetQuery2) presetQuery2.addEventListener('click', () => runPreset('SELECT name, city FROM customers WHERE city = \'Bengaluru\';'));
+  const presetQuery3 = document.getElementById('presetQuery3');
+  if (presetQuery3) presetQuery3.addEventListener('click', () => runPreset('SELECT order_id, amount FROM orders WHERE amount > 500;'));
+
+  // Run initial query
+  runPreset('SELECT * FROM customers;');
+});
+
+  // ============ CONFETTI GENERATOR ============
+  function triggerConfetti() {
+    const container = document.createElement('div');
+    container.className = 'confetti-container';
+    document.body.appendChild(container);
+    const colors = ['#19c4ff', '#9b8cff', '#38f0d8', '#ffcb6b', '#ff6b81', '#62e857'];
+    for (let i = 0; i < 100; i++) {
+      const p = document.createElement('div');
+      p.className = 'confetti-particle';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      p.style.transform = `scale(${Math.random() * 0.8 + 0.4})`;
+      p.style.animationDelay = Math.random() * 2 + 's';
+      p.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      container.appendChild(p);
+    }
+    setTimeout(() => container.remove(), 5000);
+  }
+
+  // ============ 07 INTERACTIVE SCHEMA MATCHER ============
+  window.__demos.push(function(){
+    const workspace = document.getElementById('matcherWorkspace');
+    const canvas = document.getElementById('matcherCanvas');
+    if (!workspace || !canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let selectedCol = null;
+    let links = [];
+    const correctLinks = [
+      { fromTable: 'orders', fromCol: 'customer_id', toTable: 'customers', toCol: 'customer_id' },
+      { fromTable: 'orders', fromCol: 'restaurant_id', toTable: 'restaurants', toCol: 'restaurant_id' },
+      { fromTable: 'order_items', fromCol: 'order_id', toTable: 'orders', toCol: 'order_id' },
+      { fromTable: 'order_items', fromCol: 'dish_id', toTable: 'dishes', toCol: 'dish_id' },
+      { fromTable: 'dishes', fromCol: 'restaurant_id', toTable: 'restaurants', toCol: 'restaurant_id' }
+    ];
+
+    const resizeCanvas = () => {
+      canvas.width = workspace.clientWidth;
+      canvas.height = workspace.clientHeight;
+      drawLinks();
+    };
+
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 200);
+
+    const getColPos = (tableId, colName) => {
+      const tableEl = document.getElementById('m-' + tableId);
+      if (!tableEl) return null;
+      const colEl = tableEl.querySelector(`[data-col="${colName}"]`);
+      if (!colEl) return null;
+      
+      const rRect = workspace.getBoundingClientRect();
+      const cRect = colEl.getBoundingClientRect();
+      
+      const x = cRect.left - rRect.left + (colEl.offsetWidth / 2);
+      const y = cRect.top - rRect.top + (colEl.offsetHeight / 2);
+      return { x, y };
+    };
+
+    const drawLinks = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      links.forEach(link => {
+        const p1 = getColPos(link.fromTable, link.fromCol);
+        const p2 = getColPos(link.toTable, link.toCol);
+        if (p1 && p2) {
+          ctx.strokeStyle = '#38f0d8';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+          
+          ctx.fillStyle = '#38f0d8';
+          ctx.beginPath(); ctx.arc(p1.x, p1.y, 4, 0, Math.PI*2); ctx.fill();
+          ctx.beginPath(); ctx.arc(p2.x, p2.y, 4, 0, Math.PI*2); ctx.fill();
+        }
+      });
+    };
+
+    const cols = workspace.querySelectorAll('.matcher-col');
+    cols.forEach(col => {
+      col.addEventListener('click', () => {
+        const table = col.dataset.table;
+        const columnName = col.dataset.col;
+        const type = col.dataset.type;
+
+        if (!selectedCol) {
+          selectedCol = { table, col: columnName, type, element: col };
+          col.classList.add('selected');
+          document.getElementById('matcherOut').innerHTML = `Selected <span class="hl">${table}.${columnName}</span>. Select its matching key in another table...`;
+        } else {
+          if (selectedCol.table === table) {
+            selectedCol.element.classList.remove('selected');
+            selectedCol = null;
+            document.getElementById('matcherOut').innerHTML = `Selection reset. Select a column.`;
+            return;
+          }
+
+          const isCorrect = correctLinks.some(link => {
+            return (
+              (link.fromTable === selectedCol.table && link.fromCol === selectedCol.col && link.toTable === table && link.toCol === columnName) ||
+              (link.toTable === selectedCol.table && link.toCol === selectedCol.col && link.fromTable === table && link.fromCol === columnName)
+            );
+          });
+
+          selectedCol.element.classList.remove('selected');
+
+          if (isCorrect) {
+            const alreadyExists = links.some(link => {
+              return (
+                (link.fromTable === selectedCol.table && link.fromCol === selectedCol.col && link.toTable === table && link.toCol === columnName) ||
+                (link.toTable === selectedCol.table && link.toCol === selectedCol.col && link.fromTable === table && link.fromCol === columnName)
+              );
+            });
+
+            if (!alreadyExists) {
+              links.push({
+                fromTable: selectedCol.table,
+                fromCol: selectedCol.col,
+                toTable: table,
+                toCol: columnName
+              });
+              
+              selectedCol.element.classList.add('linked');
+              col.classList.add('linked');
+              
+              document.getElementById('matcherOut').innerHTML = `<span class="g">✓ Correct relationship!</span> Linked ${selectedCol.table}.${selectedCol.col} to ${table}.${columnName}.`;
+              drawLinks();
+              
+              const scoreEl = document.getElementById('matcherScore');
+              scoreEl.textContent = `Links: ${links.length} / 5`;
+              
+              if (links.length === 5) {
+                document.getElementById('matcherOut').innerHTML = `<span class="g">★ PERFECT! You linked all schema relationships correctly!</span>`;
+                triggerConfetti();
+                markLabDone(6);
+              }
+            } else {
+              document.getElementById('matcherOut').innerHTML = `Relationship already linked!`;
+            }
+          } else {
+            document.getElementById('matcherOut').innerHTML = `<span class="r">✗ Incorrect mapping!</span> Make sure you are linking Primary Keys (★) to their corresponding Foreign Keys (→).`;
+          }
+
+          selectedCol = null;
+        }
+      });
+    });
+
+    document.getElementById('matcherReset').addEventListener('click', () => {
+      links = [];
+      selectedCol = null;
+      cols.forEach(col => col.classList.remove('selected', 'linked'));
+      document.getElementById('matcherScore').textContent = `Links: 0 / 5`;
+      document.getElementById('matcherOut').innerHTML = `Schema Matcher reset. Select a column to start connecting...`;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+  });
+
+  // ============ 08 END-OF-PAGE SQL MCQ QUIZ ============
+  window.__demos.push(function(){
+    const quizData = [
+      {
+        q: "1. What is the main purpose of a database schema?",
+        opts: [
+          "To speed up the network load time of the browser",
+          "To act as a blueprint defining tables, columns, keys, and their connections",
+          "To perform mathematical calculations on arrays"
+        ],
+        ans: 1,
+        exp: "Correct! The schema is the blueprint of how your tables, columns, and relationships are structured."
+      },
+      {
+        q: "2. Why should you avoid storing duplicate facts across multiple rows?",
+        opts: [
+          "It makes the files too small to read",
+          "It leads to data redundancy, inconsistencies, and high update overhead",
+          "SQL database engines cannot query tables with duplicate data"
+        ],
+        ans: 1,
+        exp: "Correct! Storing duplicate facts leads to inconsistencies (anomalies) when records are updated."
+      },
+      {
+        q: "3. What is the key difference between a Primary Key (PK) and a Foreign Key (FK)?",
+        opts: [
+          "A PK is a unique identifier inside its home table; an FK points to a PK in another table",
+          "A PK is only for numbers; an FK is only for texts",
+          "There is no difference; they are interchangeable terms"
+        ],
+        ans: 0,
+        exp: "Correct! PK uniquely identifies rows locally; FK references PKs elsewhere to establish relations."
+      },
+      {
+        q: "4. Which JOIN type returns all records from the left table even if there is no match in the right table?",
+        opts: [
+          "INNER JOIN",
+          "LEFT JOIN",
+          "RIGHT JOIN"
+        ],
+        ans: 1,
+        exp: "Correct! LEFT JOIN preserves all records from the left table, filling missing matches with NULL."
+      },
+      {
+        q: "5. When modeling a Many-to-Many (N:M) relationship, what do you need?",
+        opts: [
+          "A single column containing lists of IDs",
+          "A junction (bridge) table mapping IDs from both tables",
+          "Nothing, SQL handles Many-to-Many natively in a single spreadsheet table"
+        ],
+        ans: 1,
+        exp: "Correct! Many-to-Many relationships always require a junction table to map pairs cleanly."
+      }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+
+    const qText = document.getElementById('quizQuestionText');
+    const optsContainer = document.getElementById('quizOptionsContainer');
+    const scoreEl = document.getElementById('quizScore');
+    const statusEl = document.getElementById('quizStatus');
+    const outEl = document.getElementById('quizOut');
+
+    if (!qText || !optsContainer) return;
+
+    function renderQuestion() {
+      if (currentQ >= quizData.length) {
+        qText.textContent = "Quiz Completed! 🎉";
+        optsContainer.innerHTML = "";
+        scoreEl.textContent = "Finished!";
+        statusEl.textContent = `Score: ${score} / ${quizData.length}`;
+        if (score === quizData.length) {
+          outEl.innerHTML = `<span class="g">★ 5/5 Perfect score! Munna Kumar, you have mastered Relational Database Foundations!</span>`;
+          triggerConfetti();
+        } else {
+          outEl.innerHTML = `<span class="hl">Finished with score ${score}/${quizData.length}. Try restarting the quiz to get a perfect score!</span>`;
+        }
+        
+        const resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.style.marginTop = '10px';
+        resetBtn.textContent = 'Restart Quiz';
+        resetBtn.addEventListener('click', () => {
+          currentQ = 0;
+          score = 0;
+          renderQuestion();
+        });
+        optsContainer.appendChild(resetBtn);
+        return;
+      }
+
+      const q = quizData[currentQ];
+      qText.textContent = q.q;
+      optsContainer.innerHTML = "";
+      scoreEl.textContent = `Question ${currentQ + 1} / ${quizData.length}`;
+      statusEl.textContent = `Score: ${score}`;
+      outEl.innerHTML = "Select an option to proceed.";
+
+      q.opts.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt';
+        btn.innerHTML = `<span class="prog-checkbox"></span> ${opt}`;
+        btn.addEventListener('click', () => {
+          if (optsContainer.querySelector('.correct') || optsContainer.querySelector('.incorrect')) return;
+
+          const isCorrect = idx === q.ans;
+          if (isCorrect) {
+            btn.classList.add('correct');
+            score++;
+            outEl.innerHTML = `<span class="g">Correct!</span> ${q.exp}`;
+          } else {
+            btn.classList.add('incorrect');
+            const correctBtn = optsContainer.querySelectorAll('.quiz-opt')[q.ans];
+            if (correctBtn) correctBtn.classList.add('correct');
+            outEl.innerHTML = `<span class="r">Incorrect!</span> ${q.exp}`;
+          }
+
+          setTimeout(() => {
+            currentQ++;
+            renderQuestion();
+          }, 3000);
+        });
+        optsContainer.appendChild(btn);
+      });
+    }
+
+    renderQuestion();
+  });
+
+  // ============ AADHAAR GENERATOR ============
+  const adInput = $('#aadhaarInputName');
+  const adBtn = $('#generateAadhaarBtn');
+  const adName = $('#aadhaarCardName');
+  const adPK = $('#aadhaarCardPK');
+  if(adInput && adBtn && adName && adPK) {
+    const gen = () => {
+      const name = adInput.value.trim() || 'Munna Kumar';
+      adName.textContent = name;
+      let hash = 0;
+      for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const uniqueNum = Math.abs(hash % 90000) + 10000;
+      adPK.textContent = `PK-CUST-${uniqueNum}`;
+      const card = $('#aadhaarCardVisual');
+      card.style.transform = 'scale(1.03)';
+      card.style.transition = 'transform 0.2s ease';
+      setTimeout(() => card.style.transform = 'none', 200);
+    };
+    adBtn.addEventListener('click', gen);
+    adInput.addEventListener('input', gen);
+    gen();
+  }
+
+  // ============ SIDEBAR SPARKLINE ============
+  const spCanvas = $('#sparklineCanvas');
+  if(spCanvas) {
+    const spCtx = spCanvas.getContext('2d');
+    const points = Array(20).fill(12);
+    const drawSparkline = () => {
+      const isL = document.documentElement.getAttribute('data-theme')==='light';
+      const W = spCanvas.width, H = spCanvas.height;
+      spCtx.clearRect(0,0,W,H);
+      points.shift();
+      points.push(12 + Math.floor(Math.random()*12 - 6));
+      
+      spCtx.strokeStyle = isL ? '#0a8198' : '#38f0d8';
+      spCtx.lineWidth = 1.8;
+      spCtx.beginPath();
+      const step = W / (points.length - 1);
+      points.forEach((p, i) => {
+        const px = i * step;
+        const py = H - clamp(p, 2, H - 2);
+        if (i === 0) spCtx.moveTo(px, py);
+        else spCtx.lineTo(px, py);
+      });
+      spCtx.stroke();
+    };
+    setInterval(drawSparkline, 800);
+  }
+
+/* boot */
+window.addEventListener('load',()=>{
+  runDemos(); initTheme(); initReveal(); initStory(); initRecall(); onScroll();
+  if(window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise();
+});
+</script>
+
+
+<!-- SQL Cheat Sheet Side-Drawer -->
+<button class="cheat-trigger-btn" id="cheatBtn">📖 SQL Cheat Sheet</button>
+
+<div class="cheat-drawer" id="cheatDrawer">
+  <div class="cheat-drawer-header">
+    <h3>📖 SQL Cheat Sheet</h3>
+    <button class="cheat-close" id="cheatCloseBtn">✕</button>
+  </div>
+  
+  <div class="cheat-section">
+    <h4>1. SELECT (Column Projection)</h4>
+    <p class="muted" style="font-size:13px; margin: 4px 0 8px;">Choose columns to retrieve.</p>
+    <div class="cheat-code">SELECT name, city FROM customers;</div>
+    <div class="cheat-code">SELECT * FROM orders; -- All columns</div>
+  </div>
+
+  <div class="cheat-section">
+    <h4>2. WHERE (Row Filtering)</h4>
+    <p class="muted" style="font-size:13px; margin: 4px 0 8px;">Filter rows matching condition.</p>
+    <div class="cheat-code">SELECT * FROM restaurants 
+WHERE city = 'Pune';</div>
+    <div class="cheat-code">SELECT * FROM orders 
+WHERE amount > 500;</div>
+  </div>
+
+  <div class="cheat-section">
+    <h4>3. JOIN (Merge Tables)</h4>
+    <p class="muted" style="font-size:13px; margin: 4px 0 8px;">Join matching rows by PK/FK keys.</p>
+    <div class="cheat-code">SELECT orders.order_id, customers.name
+FROM orders
+JOIN customers
+ON orders.customer_id = customers.customer_id;</div>
+  </div>
+
+  <div class="cheat-section">
+    <h4>4. Key Relational Terms</h4>
+    <ul style="padding-left: 16px; margin: 4px 0; font-size: 13px; color: var(--muted);">
+      <li><strong>PK (Primary Key):</strong> Unique ID for every row in a table.</li>
+      <li><strong>FK (Foreign Key):</strong> ID pointing to another table's PK.</li>
+      <li><strong>Schema:</strong> The blueprint of tables, columns, and relationships.</li>
+      <li><strong>Grain:</strong> What one single row represents.</li>
+    </ul>
+  </div>
+</div>
+
+<svg id="MJX-SVG-global-cache" style="display: none;"><defs></defs></svg><div style="position: relative;" id="zp-16-1-0-licdn-root-apollo_everywhere"><template shadowrootmode="open"><div class="zp apolloio-css-vars-reset x_lAIzV x_ktWFc" dir="ltr" data-has-tooltip-listener=""><div class="x_BJJxg" data-disable-focus-trap="true" data-testid="toast-container-bottom"></div><div class="x_KfhZL" aria-live="polite" aria-atomic="true" data-disable-focus-trap="true" data-testid="toast-container-top"></div><span data-name="tooltip-listener" aria-hidden="true" style="display: none;"></span></div> </template></div></body></html>
